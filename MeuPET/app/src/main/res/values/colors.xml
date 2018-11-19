@@ -13,9 +13,11 @@
         <color name="bnav_tab2">#EA5C46</color>
         <color name="bnav_tab3">#3DB4CC</color>
 
-    <color name="bottomtab_item_resting">#36000000</color>
-    <color name="bottomtab_item_disabled">#1e000000</color>
+        <color name="bnav_selected_tab">#ffaa62</color>
+        <color name="bnav_non_selected_tab">#ba7424</color>
+        <color name="bnav_background">#b42c1700</color>
 
-    <color name="divider_light">#0c000000</color>
+    <!--Items Divider-->
+        <color name="divider_light">#0c000000</color>
 
 </resources>

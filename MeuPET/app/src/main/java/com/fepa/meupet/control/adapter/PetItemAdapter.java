@@ -1,4 +1,4 @@
-package com.fepa.meupet.view.adapter;
+package com.fepa.meupet.control.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fepa.meupet.R;
 import com.fepa.meupet.model.agent.animal.Animal;
@@ -33,7 +34,7 @@ public class PetItemAdapter extends RecyclerView.Adapter<PetItemAdapter.ItemView
 
         for (int i = 0; i < SIZE; i++) {
             Animal animal = new Animal(nameArray[i]);
-            animals.add(animal);
+            this.animals.add(animal);
         }
     }
 
@@ -58,7 +59,8 @@ public class PetItemAdapter extends RecyclerView.Adapter<PetItemAdapter.ItemView
         return animals != null ? animals.size() : 0;
     }
 
-    protected static class ItemViewHolder extends RecyclerView.ViewHolder{
+
+    protected class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         protected TextView tvName;
 
@@ -66,6 +68,15 @@ public class PetItemAdapter extends RecyclerView.Adapter<PetItemAdapter.ItemView
             super(itemView);
 
             tvName = itemView.findViewById(R.id.tvPetName);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+            animals.remove(position);
+
+            Toast.makeText(context, "REMOVIDO", Toast.LENGTH_SHORT).show();
+            notifyItemRemoved(position);
         }
     }
 }
