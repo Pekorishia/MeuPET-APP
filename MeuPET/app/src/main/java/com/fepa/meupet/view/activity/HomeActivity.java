@@ -18,7 +18,9 @@ import com.fepa.meupet.R;
 import com.fepa.meupet.control.adapter.BottomBarAdapter;
 import com.fepa.meupet.control.viewpager.NoSwipePager;
 import com.fepa.meupet.model.environment.constants.MeuPETConfig;
+import com.fepa.meupet.view.fragment.LostPetsFragment;
 import com.fepa.meupet.view.fragment.PetListFragment;
+import com.fepa.meupet.view.fragment.SearchMapFragment;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -141,33 +143,17 @@ public class HomeActivity extends AppCompatActivity {
 
         // attaches the pageAdapter as the viewPager adapter
         this.viewPager.setAdapter(this.pagerAdapter);
+
+        viewPager.setCurrentItem(MeuPETConfig.START_BOTTOM_NAV_TAB);
     }
 
     private void setupPagerAdapter(){
         this.pagerAdapter = new BottomBarAdapter(getSupportFragmentManager());
 
-        // TODO: change to application model
-        pagerAdapter.addFragments(createFragment());
-        pagerAdapter.addFragments(createFragment());
-        pagerAdapter.addFragments(createFragment());
+        pagerAdapter.addFragments(new SearchMapFragment());
+        pagerAdapter.addFragments(new PetListFragment());
+        pagerAdapter.addFragments(new LostPetsFragment());
     }
-
-    private PetListFragment createFragment() {
-        PetListFragment fragment = new PetListFragment();
-
-        // TODO: IF ITS NEEDED TO PASS A BUNDLE TO THE FRAGMENT
-//        fragment.setArguments(passFragmentArguments(fetchColor(color)));
-
-        return fragment;
-    }
-
-    // TODO: IF ITS NEEDED TO PASS A BUNDLE TO THE FRAGMENT
-//    private Bundle passFragmentArguments(int color) {
-//        Bundle bundle = new Bundle();
-//        bundle.putInt("color", color);
-//        return bundle;
-//    }
-
 
     // TODO: detach notification handler from home
     private void createFakeNotification() {

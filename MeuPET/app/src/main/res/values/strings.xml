@@ -2,71 +2,79 @@
     <string name="app_name">MeuPET</string>
 
     <!--Common Area-->
-        <string name="email_error">Escreva um e-mail válido</string>
-        <string name="pwd_error">No mínimo 4 caracteres</string>
+    <string name="email_error">Escreva um e-mail válido</string>
+    <string name="pwd_error">No mínimo 4 caracteres</string>
 
 
     <!--Hints-->
-        <string name="password_confirm_hint_text">Confirme a Senha</string>
-        <string name="password_hint_text">Senha</string>
-        <string name="name_hint_text">Nome</string>
+    <string name="password_confirm_hint_text">Confirme a Senha</string>
+    <string name="password_hint_text">Senha</string>
+    <string name="name_hint_text">Nome</string>
 
 
     <!--Login-->
-        <string name="signup_text">Não tem conta? Clique aqui</string>
+    <string name="signup_text">Não tem conta? Clique aqui</string>
 
-        <string name="login_error">Login Inválido</string>
+    <string name="login_error">Login Inválido</string>
 
 
     <!--Register User-->
-        <string name="login_text">Já tem conta? Clique aqui</string>
-        <string name="register_bt_text">Criar Conta</string>
+    <string name="login_text">Já tem conta? Clique aqui</string>
+    <string name="register_bt_text">Criar Conta</string>
 
-        <string name="password_mismatch_error">As senhas não batem</string>
-        <string name="register_error">Erro ao Registrar</string>
+    <string name="password_mismatch_error">As senhas não batem</string>
+    <string name="register_error">Erro ao Registrar</string>
 
 
     <!--Home-->
-        <!--Bottom Navigation-->
-        <string-array name="bnav_tab_name">
-            <item>Mapa</item>
-            <item>Meus Pets</item>
-            <item>Perdidos</item>
-        </string-array>
+    <!--Pet Edit Menu-->
+    <string name="pet_edit_title">Editar Pet</string>
+    <string name="pet_del_title">Deletar Pet</string>
+    <string name="pet_add_title">Adicionar Pet</string>
 
-        <array name="bnav_tab_drawable">
-            <item>@drawable/map</item>
-            <item>@drawable/paw</item>
-            <item>@drawable/location</item>
-        </array>
+    <!--Bottom Navigation-->
+    <string-array name="bnav_tab_name">
+        <item>Mapa</item>
+        <item>Meus Pets</item>
+        <item>Perdidos</item>
+    </string-array>
+
+    <array name="bnav_tab_drawable">
+        <item>@drawable/map</item>
+        <item>@drawable/paw</item>
+        <item>@drawable/location</item>
+    </array>
 
 
     <!--TESTS-->
-        <string-array name="animal_names">
-            <item>memphis</item>
-            <item>oakley</item>
-            <item>shelby</item>
-            <item>Shiloh</item>
-            <item>meeko</item>
-            <item>tinkerbelle</item>
-            <item>nukka</item>
-            <item>yeti</item>
-            <item>kiro</item>
-            <item>simba</item>
-            <item>sharla</item>
-            <item>ayka</item>
-            <item>kirara</item>
-            <item>erika</item>
-            <item>erza</item>
-            <item>nukka</item>
-            <item>kira</item>
-            <item>dio</item>
-            <item>diorno</item>
-            <item>joseph</item>
-            <item>jotarou</item>
-            <item>jonathan</item>
-            <item>josuke</item>
-            <item>narancia</item>
-        </string-array>
+    <string-array name="animal_names">
+        <item>memphis</item>
+        <item>oakley</item>
+        <item>shelby</item>
+        <item>Shiloh</item>
+        <item>meeko</item>
+        <item>tinkerbelle</item>
+        <item>nukka</item>
+        <item>yeti</item>
+        <item>kiro</item>
+        <item>simba</item>
+        <item>sharla</item>
+        <item>ayka</item>
+        <item>kirara</item>
+        <item>erika</item>
+        <item>erza</item>
+        <item>nukka</item>
+        <item>kira</item>
+        <item>dio</item>
+        <item>diorno</item>
+        <item>joseph</item>
+        <item>jotarou</item>
+        <item>jonathan</item>
+        <item>josuke</item>
+        <item>narancia</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

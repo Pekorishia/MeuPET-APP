@@ -1,5 +1,6 @@
 package com.fepa.meupet.control.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -19,16 +20,16 @@ public class PetItemAdapter extends RecyclerView.Adapter<PetItemAdapter.ItemView
 
     private List<Animal> animals = new ArrayList<>();
 
-    private Context context;
+    private Activity activity;
 
-    public PetItemAdapter(Context context){
-        this.context = context;
+    public PetItemAdapter(Activity activity){
+        this.activity = activity;
 
         this.populateList();
     }
 
     private void populateList(){
-        String[] nameArray = context.getResources().getStringArray(R.array.animal_names);
+        String[] nameArray = this.activity.getApplicationContext().getResources().getStringArray(R.array.animal_names);
 
         final int SIZE = nameArray.length;
 
@@ -60,23 +61,33 @@ public class PetItemAdapter extends RecyclerView.Adapter<PetItemAdapter.ItemView
     }
 
 
-    protected class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    protected class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         protected TextView tvName;
 
+        private boolean actionModeActive;
+
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            tvName = itemView.findViewById(R.id.tvPetName);
+            this.tvName = itemView.findViewById(R.id.tvPetRowItem);
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
+
             int position = getAdapterPosition();
             animals.remove(position);
-
-            Toast.makeText(context, "REMOVIDO", Toast.LENGTH_SHORT).show();
             notifyItemRemoved(position);
+
+            Toast.makeText(activity.getApplicationContext(), "CLICK", Toast.LENGTH_SHORT).show();
+
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            return false;
         }
     }
 }

@@ -3,12 +3,11 @@ package com.fepa.meupet.model.agent.animal;
 import android.widget.ImageView;
 
 import java.util.Date;
-import java.util.List;
 
 public class Animal {
 
     private float age;      // year
-    private int heigth;     // cm
+    private int height;     // cm
     private boolean sex;    // M - false F - true
     private float weight;   // kg
 
@@ -17,18 +16,8 @@ public class Animal {
     private Date birthday;
     private ImageView photo;
 
-//    private Veterinarian vet;
-//    private Notification notification;
-//    private List<Module> modules;
-
     public Animal(String name) {
         this.name = name;
-    }
-
-
-    @Override
-    public String toString() {
-        return this.name;
     }
 
     public float getAge() {
@@ -39,12 +28,12 @@ public class Animal {
         this.age = age;
     }
 
-    public int getHeigth() {
-        return heigth;
+    public int getHeight() {
+        return height;
     }
 
-    public void setHeigth(int heigth) {
-        this.heigth = heigth;
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     public boolean isSex() {
