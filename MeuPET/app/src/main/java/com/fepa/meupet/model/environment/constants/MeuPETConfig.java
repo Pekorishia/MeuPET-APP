@@ -14,7 +14,7 @@ public final class MeuPETConfig {
     // home
     public static final int START_BOTTOM_NAV_TAB = 1;
 
-    // Animal
+    // Pet
     public static final boolean MALE = false;
     public static final boolean FEMALE = true;
 

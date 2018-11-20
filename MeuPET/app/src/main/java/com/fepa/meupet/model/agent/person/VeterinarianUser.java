@@ -1,14 +1,14 @@
 package com.fepa.meupet.model.agent.person;
 
-import com.fepa.meupet.model.agent.animal.Animal;
+import com.fepa.meupet.model.agent.pet.Pet;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class VeterinarianUser extends Person {
 
-    private List<Animal> myPets;
-    private List<Animal> myPatients;
+    private List<Pet> myPets;
+    private List<Pet> myPatients;
 
     public VeterinarianUser(String name, String phoneNumber) {
         super(name, phoneNumber);
@@ -16,35 +16,35 @@ public class VeterinarianUser extends Person {
         this.myPatients = new ArrayList<>();
     }
 
-    public void removePet(Animal animal){
-        this.myPets.remove(animal);
+    public void removePet(Pet pet){
+        this.myPets.remove(pet);
     }
 
-    public void removePatient(Animal animal){
-        this.myPets.remove(animal);
+    public void removePatient(Pet pet){
+        this.myPets.remove(pet);
     }
 
-    public void addPet(Animal animal){
-        this.myPets.add(animal);
+    public void addPet(Pet pet){
+        this.myPets.add(pet);
     }
 
-    public void addPatient(Animal animal){
-        this.myPets.add(animal);
+    public void addPatient(Pet pet){
+        this.myPets.add(pet);
     }
 
-    public List<Animal> getMyPets() {
+    public List<Pet> getMyPets() {
         return myPets;
     }
 
-    public void setMyPets(List<Animal> myPets) {
+    public void setMyPets(List<Pet> myPets) {
         this.myPets = myPets;
     }
 
-    public List<Animal> getMyPatients() {
+    public List<Pet> getMyPatients() {
         return myPatients;
     }
 
-    public void setMyPatients(List<Animal> myPatients) {
+    public void setMyPatients(List<Pet> myPatients) {
         this.myPatients = myPatients;
     }
 }

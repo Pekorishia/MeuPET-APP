@@ -1,6 +1,6 @@
-package com.fepa.meupet.model.agent.animal;
+package com.fepa.meupet.model.agent.pet;
 
-public class Dog extends Animal {
+public class Dog extends Pet {
 
     //    private Veterinarian vet;
     //    private Notification notification;

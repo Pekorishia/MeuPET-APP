@@ -1,93 +1,58 @@
 package com.fepa.meupet.control.adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fepa.meupet.R;
-import com.fepa.meupet.model.agent.animal.Animal;
+import com.fepa.meupet.model.agent.pet.Pet;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class PetItemAdapter extends RecyclerView.Adapter<PetItemAdapter.ItemViewHolder> {
+public class PetItemAdapter extends BaseAdapter {
 
-    private List<Animal> animals = new ArrayList<>();
+    private List<Pet> petList;
+    private Context context;
 
-    private Activity activity;
 
-    public PetItemAdapter(Activity activity){
-        this.activity = activity;
-
-        this.populateList();
-    }
-
-    private void populateList(){
-        String[] nameArray = this.activity.getApplicationContext().getResources().getStringArray(R.array.animal_names);
-
-        final int SIZE = nameArray.length;
-
-        for (int i = 0; i < SIZE; i++) {
-            Animal animal = new Animal(nameArray[i]);
-            this.animals.add(animal);
-        }
-    }
-
-    @NonNull
-    @Override
-    public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext())
-                    .inflate(R.layout.fragment_pet_item_list,viewGroup,false);
-
-        return new ItemViewHolder(view);
+    public PetItemAdapter(Context context, List<Pet> petList){
+        this.context = context;
+        this.petList = petList;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ItemViewHolder itemViewHolder, int i) {
-        Animal animal = animals.get(i);
-
-        itemViewHolder.tvName.setText(animal.getName());
+    public int getCount() {
+        return (petList != null ? petList.size() : 0);
     }
 
     @Override
-    public int getItemCount() {
-        return animals != null ? animals.size() : 0;
+    public Object getItem(int i) {
+        return petList.get(i);
     }
 
+    @Override
+    public long getItemId(int i) {
+        return i;
+    }
 
-    protected class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    @Override
+    public View getView(int i, View view, ViewGroup viewGroup) {
 
-        protected TextView tvName;
-
-        private boolean actionModeActive;
-
-        public ItemViewHolder(@NonNull View itemView) {
-            super(itemView);
-            this.tvName = itemView.findViewById(R.id.tvPetRowItem);
-            itemView.setOnClickListener(this);
-            itemView.setOnLongClickListener(this);
+        if (view == null){
+            view = View.inflate(context, R.layout.fragment_pet_item, null);
         }
 
-        @Override
-        public void onClick(View view) {
+        Pet pet = petList.get(i);
 
-            int position = getAdapterPosition();
-            animals.remove(position);
-            notifyItemRemoved(position);
+        ImageView ivImage = view.findViewById(R.id.ivPetRowItem);
+        TextView tvName = view.findViewById(R.id.tvPetRowItem);
 
-            Toast.makeText(activity.getApplicationContext(), "CLICK", Toast.LENGTH_SHORT).show();
+        ivImage.setImageResource(R.mipmap.ic_launcher);
+        tvName.setText(pet.getName());
 
-        }
-
-        @Override
-        public boolean onLongClick(View view) {
-            return false;
-        }
+        return view;
     }
 }

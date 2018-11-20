@@ -1,10 +1,10 @@
-package com.fepa.meupet.model.agent.animal;
+package com.fepa.meupet.model.agent.pet;
 
 import android.widget.ImageView;
 
 import java.util.Date;
 
-public class Animal {
+public class Pet {
 
     private float age;      // year
     private int height;     // cm
@@ -16,7 +16,7 @@ public class Animal {
     private Date birthday;
     private ImageView photo;
 
-    public Animal(String name) {
+    public Pet(String name) {
         this.name = name;
     }
 

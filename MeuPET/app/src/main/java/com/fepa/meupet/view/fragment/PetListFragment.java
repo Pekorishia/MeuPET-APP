@@ -4,30 +4,29 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.fepa.meupet.R;
 import com.fepa.meupet.control.adapter.PetItemAdapter;
+import com.fepa.meupet.model.agent.pet.Pet;
 
-public class PetListFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.List;
 
-    private RecyclerView recyclerView;
+public class PetListFragment extends ListFragment {
+
+    private List<Pet> petList;
+    private ListView listView;
+    private PetItemAdapter adapter;
 
     public PetListFragment() {
         // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -36,15 +35,27 @@ public class PetListFragment extends Fragment {
         // inflates the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_pet_list, container, false);
 
-        this.recyclerView = view.findViewById(R.id.pet_list_recycler_view);
+        this.listView = view.findViewById(android.R.id.list);
 
-        this.recyclerView.setLayoutManager(
-                new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false)
-        );
+        this.populateList();
 
-        PetItemAdapter adapter = new PetItemAdapter(getActivity());
-        this.recyclerView.setAdapter(adapter);
+        this.adapter = new PetItemAdapter(getContext(), petList);
+        listView.setAdapter(adapter);
 
         return view;
+    }
+
+
+    private void populateList(){
+        petList = new ArrayList<>();
+
+        String[] nameArray = getContext().getResources().getStringArray(R.array.animal_names);
+
+        final int SIZE = nameArray.length;
+
+        for (int i = 0; i < SIZE; i++) {
+            Pet pet = new Pet(nameArray[i]);
+            this.petList.add(pet);
+        }
     }
 }
