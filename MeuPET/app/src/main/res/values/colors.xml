@@ -17,7 +17,4 @@
         <color name="bnav_non_selected_tab">#ba7424</color>
         <color name="bnav_background">#b42c1700</color>
 
-    <!--Items Divider-->
-        <color name="divider_light">#0c000000</color>
-
 </resources>

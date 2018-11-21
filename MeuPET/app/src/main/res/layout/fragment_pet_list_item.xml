@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FEFEFE">
+
+        <ImageView
+            android:id="@+id/ivPetRowItem"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:adjustViewBounds="true"
+            android:padding="8dp" />
+
+        <TextView
+            android:id="@+id/tvPetRowItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textStyle="bold"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="20dp"
+            android:layout_toEndOf="@+id/ivPetRowItem"
+            android:layout_toRightOf="@+id/ivPetRowItem"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+</RelativeLayout>

@@ -1,5 +1,7 @@
 package com.fepa.meupet.model.environment.constants;
 
+import android.graphics.Color;
+
 public final class MeuPETConfig {
 
     // disable instantiation
@@ -17,6 +19,9 @@ public final class MeuPETConfig {
     // Pet
     public static final boolean MALE = false;
     public static final boolean FEMALE = true;
+
+    // List
+    public static final int ITEM_SELECTED_COLOR = Color.rgb(226, 226, 226);
 
     // Error
     public static final String INVALID_INSTANCE_EXCEPTION = "Invalid Instance Excaption";

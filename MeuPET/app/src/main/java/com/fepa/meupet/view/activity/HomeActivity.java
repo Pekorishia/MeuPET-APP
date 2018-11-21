@@ -9,6 +9,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
@@ -71,6 +73,24 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.pet_main_action, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.actPetAdd :
+                Toast.makeText(this, "ADD", Toast.LENGTH_SHORT).show();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     private void setupToolbar(){
         this.toolbar = this.findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -88,9 +108,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void setupBottomNavBehaviors() {
-        // hides the bottom nav when swiping upwards (going down)
-        bottomNavigation.setBehaviorTranslationEnabled(true);
-
         // makes the bottom nav stays over the Overview Buttons instead of behind them
         bottomNavigation.setTranslucentNavigationEnabled(true);
     }
@@ -172,12 +189,6 @@ public class HomeActivity extends AppCompatActivity {
         }, 1000);
     }
 
-    /**
-     * Simple facade to fetch color resource
-     *
-     * @param color to fetch
-     * @return int color value.
-     */
     private int fetchColor(@ColorRes int color) {
         return ContextCompat.getColor(this, color);
     }

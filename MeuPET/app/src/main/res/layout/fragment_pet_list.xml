@@ -11,6 +11,10 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:paddingBottom="@dimen/bottom_navigation_height"
-        android:paddingTop="@dimen/activity_horizontal_margin"/>
+        android:layout_marginLeft="@dimen/activity_margin_half"
+        android:layout_marginRight="@dimen/activity_margin_half"
+        android:layout_marginBottom="?attr/actionBarSize"
+        android:dividerHeight="1dp"
+        />
 
 </FrameLayout>

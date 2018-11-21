@@ -48,30 +48,30 @@
 
     <!--TESTS-->
     <string-array name="animal_names">
-        <item>memphis</item>
-        <item>oakley</item>
-        <item>shelby</item>
+        <item>Memphis</item>
+        <item>Oakley</item>
+        <item>Shelby</item>
         <item>Shiloh</item>
-        <item>meeko</item>
-        <item>tinkerbelle</item>
-        <item>nukka</item>
-        <item>yeti</item>
-        <item>kiro</item>
-        <item>simba</item>
-        <item>sharla</item>
-        <item>ayka</item>
-        <item>kirara</item>
-        <item>erika</item>
-        <item>erza</item>
-        <item>nukka</item>
-        <item>kira</item>
-        <item>dio</item>
-        <item>diorno</item>
-        <item>joseph</item>
-        <item>jotarou</item>
-        <item>jonathan</item>
-        <item>josuke</item>
-        <item>narancia</item>
+        <item>Meeko</item>
+        <item>Tinkerbelle</item>
+        <item>Nukka</item>
+        <item>Yeti</item>
+        <item>Kiro</item>
+        <item>Simba</item>
+        <item>Sharla</item>
+        <item>Ayka</item>
+        <item>Kirara</item>
+        <item>Erika</item>
+        <item>Erza</item>
+        <item>Nukka</item>
+        <item>Kira</item>
+        <item>Dio</item>
+        <item>Diorno</item>
+        <item>Joseph</item>
+        <item>Jotarou</item>
+        <item>Jonathan</item>
+        <item>Josuke</item>
+        <item>Narancia</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
