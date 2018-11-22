@@ -2,32 +2,31 @@ package com.fepa.meupet.control.auth;
 
 import android.util.Patterns;
 
-import com.fepa.meupet.model.environment.constants.LoginResultConfig;
-import com.fepa.meupet.model.environment.constants.RegisterUserResultConfig;
+import com.fepa.meupet.model.environment.enums.RegisterResult;
 
 public final class RegisterUser {
 
     // disable instantiation
     private RegisterUser(){}
 
-    public static int register (String email, String password, String pwdConfirmation){
+    public static RegisterResult register (String email, String password, String pwdConfirmation){
 
         if (!validateEmail(email)){
-            return RegisterUserResultConfig.INVALID_EMAIL;
+            return RegisterResult.INVALID_EMAIL;
         }
 
         if (!validatePassword(password)){
-            return RegisterUserResultConfig.INVALID_PASSWORD;
+            return RegisterResult.INVALID_PASSWORD;
         }
 
         if (!validatePasswordConfirmation(password,pwdConfirmation)){
-            return RegisterUserResultConfig.PASSWORD_MISMATCH;
+            return RegisterResult.PASSWORD_MISMATCH;
         }
 
         // TODO: Call a DAO to register
         // RegisterUserResultConfig.REGISTER_FAILED
 
-        return RegisterUserResultConfig.REGISTER_SUCCESS;
+        return RegisterResult.REGISTER_SUCCESS;
     }
 
     private static boolean validateEmail(String email){

@@ -16,6 +16,10 @@ public class Pet {
     private Date birthday;
     private ImageView photo;
 
+    //    private Veterinarian vet;
+    //    private Notification notification;
+    //    private List<Module> modules;
+
     public Pet(String name) {
         this.name = name;
     }

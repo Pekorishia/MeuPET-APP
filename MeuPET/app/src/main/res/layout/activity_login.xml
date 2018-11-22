@@ -18,13 +18,6 @@
             android:layout_marginBottom="15dp"
             android:layout_gravity="center_horizontal" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="MiAu"
-            android:textSize="25sp"
-            android:gravity="center"
-            android:fontFamily="@font/ubuntumono_bold"/>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"

@@ -18,8 +18,9 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.aurelhubert.ahbottomnavigation.notification.AHNotification;
 import com.fepa.meupet.R;
 import com.fepa.meupet.control.adapter.BottomBarAdapter;
-import com.fepa.meupet.control.viewpager.NoSwipePager;
+import com.fepa.meupet.control.viewpager.CustomSwipePager;
 import com.fepa.meupet.model.environment.constants.GeneralConfig;
+import com.fepa.meupet.model.environment.enums.SwipeDirection;
 import com.fepa.meupet.view.fragment.LostPetsFragment;
 import com.fepa.meupet.view.fragment.PetListFragment;
 import com.fepa.meupet.view.fragment.SearchMapFragment;
@@ -30,7 +31,7 @@ public class HomeActivity extends AppCompatActivity {
     private Boolean notificationVisible = false;
 
     private Toolbar toolbar;
-    private NoSwipePager viewPager;
+    private CustomSwipePager viewPager;
     private BottomBarAdapter pagerAdapter;
     private AHBottomNavigation bottomNavigation;
 
@@ -38,9 +39,6 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
-        // manages toolbar
-        this.setupToolbar();
 
         // manages viewpager
         this.setupViewPager();
@@ -89,11 +87,6 @@ public class HomeActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void setupToolbar(){
-        this.toolbar = this.findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
     }
 
     private void setupBottomNavigation(){
@@ -153,7 +146,7 @@ public class HomeActivity extends AppCompatActivity {
         this.viewPager = this.findViewById(R.id.viewPager);
 
         // disables swiping
-        this.viewPager.setPagingEnabled(false);
+        this.viewPager.setAllowedSwipeDirection(SwipeDirection.none);
 
         // manages pagerAdapter
         this.setupPagerAdapter();

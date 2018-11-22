@@ -38,7 +38,7 @@ public class PetListFragment extends ListFragment implements ActionMode.Callback
         this.listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
         this.adapter = new PetItemAdapter(getContext());
-        listView.setAdapter(adapter);
+        this.listView.setAdapter(adapter);
 
         return view;
     }
@@ -52,7 +52,10 @@ public class PetListFragment extends ListFragment implements ActionMode.Callback
 
     @Override
     public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
-        return false;
+        menu.findItem(R.id.actPetEdit).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        menu.findItem(R.id.actPetDel).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+        return true;
     }
 
     @Override

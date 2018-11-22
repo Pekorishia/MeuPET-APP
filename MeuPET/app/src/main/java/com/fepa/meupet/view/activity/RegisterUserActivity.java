@@ -12,6 +12,7 @@ import com.fepa.meupet.R;
 import com.fepa.meupet.control.auth.RegisterUser;
 import com.fepa.meupet.model.environment.constants.LoginResultConfig;
 import com.fepa.meupet.model.environment.constants.RegisterUserResultConfig;
+import com.fepa.meupet.model.environment.enums.RegisterResult;
 
 public class RegisterUserActivity extends AppCompatActivity {
 
@@ -24,6 +25,7 @@ public class RegisterUserActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_register_user);
 
         this.etEmail = this.findViewById(R.id.etRegisterEmail);
@@ -42,14 +44,14 @@ public class RegisterUserActivity extends AppCompatActivity {
         this.btRegister.setEnabled(false);
 
         // gets the response value from register
-        int response = RegisterUser.register(
+        RegisterResult response = RegisterUser.register(
                 this.etEmail.getText().toString(),
                 this.etPassword.getText().toString(),
                 this.etConfirmPwd.getText().toString()
         );
 
         // Deals with email error
-        if (response == RegisterUserResultConfig.INVALID_EMAIL){
+        if (response == RegisterResult.INVALID_EMAIL){
             this.etEmail.setError(getString(R.string.email_error));
             this.onRegisterFailed();
         }
@@ -59,7 +61,7 @@ public class RegisterUserActivity extends AppCompatActivity {
         }
 
         // Deals with password error
-        if (response == RegisterUserResultConfig.INVALID_PASSWORD){
+        if (response == RegisterResult.INVALID_PASSWORD){
             this.etPassword.setError(getString(R.string.pwd_error));
             this.onRegisterFailed();
         }
@@ -69,7 +71,7 @@ public class RegisterUserActivity extends AppCompatActivity {
         }
 
         // Deals with password mismatch error
-        if (response == RegisterUserResultConfig.PASSWORD_MISMATCH){
+        if (response == RegisterResult.PASSWORD_MISMATCH){
             this.etConfirmPwd.setError(getString(R.string.password_mismatch_error));
             this.onRegisterFailed();
         }
@@ -79,10 +81,10 @@ public class RegisterUserActivity extends AppCompatActivity {
         }
 
         // Deals with login error
-        if (response == RegisterUserResultConfig.REGISTER_FAILED){this.onRegisterFailed();}
+        if (response == RegisterResult.REGISTER_FAILED){this.onRegisterFailed();}
 
         // if the registration was successful
-        if (response == RegisterUserResultConfig.REGISTER_SUCCESS){
+        if (response == RegisterResult.REGISTER_SUCCESS){
            this.onRegisterSuccess();
         }
     }

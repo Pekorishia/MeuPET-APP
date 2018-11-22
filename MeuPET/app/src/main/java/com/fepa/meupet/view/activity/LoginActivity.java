@@ -11,9 +11,9 @@ import android.widget.Toast;
 
 import com.fepa.meupet.R;
 import com.fepa.meupet.control.auth.Login;
-import com.fepa.meupet.control.general.PreferenceManager;
 import com.fepa.meupet.model.environment.constants.LoginResultConfig;
 import com.fepa.meupet.model.environment.constants.GeneralConfig;
+import com.fepa.meupet.model.environment.enums.LoginResult;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -52,13 +52,13 @@ public class LoginActivity extends AppCompatActivity {
         this.btLogin.setEnabled(false);
 
         // gets the response value from login
-        int response = Login.login(
+        LoginResult response = Login.login(
                 this.etEmail.getText().toString(),
                 this.etPassword.getText().toString()
         );
 
         // Deals with email error
-        if (response == LoginResultConfig.INVALID_EMAIL){
+        if (response == LoginResult.INVALID_EMAIL){
             this.etEmail.setError(getString(R.string.email_error));
             this.onLoginFailed();
         }
@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // Deals with password error
-        if (response == LoginResultConfig.INVALID_PASSWORD){
+        if (response == LoginResult.INVALID_PASSWORD){
             this.etPassword.setError(getString(R.string.pwd_error));
             this.onLoginFailed();
         }
@@ -78,10 +78,10 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // Deals with login error
-        if (response == LoginResultConfig.LOGIN_FAILED){this.onLoginFailed();}
+        if (response == LoginResult.LOGIN_FAILED){this.onLoginFailed();}
 
         // if the login was successful
-        if (response == LoginResultConfig.LOGIN_SUCCESS){
+        if (response == LoginResult.LOGIN_SUCCESS){
             this.onLoginSuccess();
         }
     }

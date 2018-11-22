@@ -9,27 +9,46 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <activity
+            android:name=".view.activity.SplashActivity"
+            android:theme="@style/MyTheme.NoActionBar"
+        >
+             <intent-filter>
+             <action android:name="android.intent.action.MAIN" />
+
+
+             <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".view.activity.LoginActivity"
+            android:theme="@style/MyTheme.NoActionBar"
+        />
+
+        <activity
+            android:name=".view.activity.RegisterUserActivity"
+            android:theme="@style/MyTheme.NoActionBar"
+        />
+
+        <activity
+            android:name=".view.activity.SliderIntroActivity"
+            android:theme="@style/MyTheme.NoActionBar"
+        />
+
         <activity
             android:name=".view.activity.HomeActivity"
-            android:theme="@style/MyTheme.TranslucentNavigation">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:theme="@style/MyTheme.TranslucentNavigation"
+        >
+            <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
-        <activity android:name=".view.activity.SplashActivity">
-             <!--<intent-filter>-->
-             <!--<action android:name="android.intent.action.MAIN" />-->
 
-
-             <!--<category android:name="android.intent.category.LAUNCHER" />-->
-             <!--</intent-filter>-->
-        </activity>
-        <activity android:name=".view.activity.LoginActivity" />
-        <activity android:name=".view.activity.RegisterUserActivity" />
         <activity android:name=".view.activity.RegisterAnimalActivity" />
-        <activity android:name=".view.activity.SliderIntroActivity"/>
     </application>
 
 </manifest>
