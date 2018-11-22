@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.fepa.meupet.R;
 import com.fepa.meupet.control.auth.Login;
-import com.fepa.meupet.model.environment.constants.LoginResultConfig;
 import com.fepa.meupet.model.environment.constants.GeneralConfig;
 import com.fepa.meupet.model.environment.enums.LoginResult;
 

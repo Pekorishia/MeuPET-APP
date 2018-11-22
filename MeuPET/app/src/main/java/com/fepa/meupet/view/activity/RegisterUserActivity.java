@@ -1,6 +1,5 @@
 package com.fepa.meupet.view.activity;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,8 +9,6 @@ import android.widget.Toast;
 
 import com.fepa.meupet.R;
 import com.fepa.meupet.control.auth.RegisterUser;
-import com.fepa.meupet.model.environment.constants.LoginResultConfig;
-import com.fepa.meupet.model.environment.constants.RegisterUserResultConfig;
 import com.fepa.meupet.model.environment.enums.RegisterResult;
 
 public class RegisterUserActivity extends AppCompatActivity {

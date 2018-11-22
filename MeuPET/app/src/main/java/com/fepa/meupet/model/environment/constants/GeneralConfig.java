@@ -7,6 +7,8 @@ public final class GeneralConfig {
     // disable instantiation
     private GeneralConfig(){}
 
+    public static final int RESULT_OK = 1;
+
     // splash
     public static final int SPLASH_TIME = 3500;
 
@@ -19,11 +21,17 @@ public final class GeneralConfig {
     // Pet
     public static final boolean MALE = false;
     public static final boolean FEMALE = true;
+    public static final String PET_BUNDLE = "petBundle";
+    public static final int PET_ADD_REQUEST_CODE = 10;
 
     // Preference Mode
     public static final int MODE = 0;
     public static final String PREFERENCE_NAME = "WelcomeSlider";
     public static final String IS_FIRST_LAUNCH = "IsFirstTimeLaunch";
+
+    // Maps
+    public static final String PLACE_NAME_KEY = "placeName";
+    public static final String PLACE_LOCATION_KEY = "placeLocation";
 
     // List
     public static final int ITEM_SELECTED_COLOR = Color.rgb(226, 226, 226);

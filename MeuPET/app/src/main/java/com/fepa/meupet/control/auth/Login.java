@@ -2,7 +2,6 @@ package com.fepa.meupet.control.auth;
 
 import android.util.Patterns;
 
-import com.fepa.meupet.model.environment.constants.LoginResultConfig;
 import com.fepa.meupet.model.environment.enums.LoginResult;
 
 public final class Login {

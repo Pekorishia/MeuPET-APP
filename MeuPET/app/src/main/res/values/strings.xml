@@ -11,6 +11,22 @@
     <string name="password_hint_text">Senha</string>
     <string name="name_hint_text">Nome</string>
 
+    <!--Welcome Slider-->
+    <string name="next">PRÓXIMO</string>
+    <string name="skip">PULAR</string>
+    <string name="start">ENTENDI</string>
+
+    <string name="slide_1_title">Monitoramento Total</string>
+    <string name="slide_1_desc">Possibilita monitorar desde consultas veterinárias e datas de vacinas, até nível de atividade, localização, alimentação e sinais vitais.</string>
+
+    <string name="slide_2_title">Auxílio em Fuga</string>
+    <string name="slide_2_desc">Todos os donos próximos à um pet perdido serão notificados para ajudar no resgate se possível.</string>
+
+    <string name="slide_3_title">Mapa Interativo</string>
+    <string name="slide_3_desc">Com o auxílio da própria comunidade, os estabelecimentos, parques, praias e trilhas que permitam pets podem ser verificado no nosso mapa interativo.</string>
+
+    <string name="slide_4_title">Veterinários Também!</string>
+    <string name="slide_4_desc">Todos que amam animais é bem vindo no MiAu, inclusive os veterinários. Eles podem ter uma lista de pacientes de forma a ter um contato contínuo com os pets.</string>
 
     <!--Login-->
     <string name="signup_text">Não tem conta? Clique aqui</string>
@@ -25,30 +41,35 @@
     <string name="password_mismatch_error">As senhas não batem</string>
     <string name="register_error">Erro ao Registrar</string>
 
+    <!--Register Pet-->
+    <string name="pet_register_bt_text">Salvar</string>
+
 
     <!--Home-->
-    <!--Pet Edit Menu-->
-    <string name="pet_edit_title">Editar Pet</string>
-    <string name="pet_del_title">Deletar Pet</string>
-    <string name="pet_add_title">Adicionar Pet</string>
+        <!--Pet Edit Menu-->
+        <string name="pet_edit_title">Editar Pet</string>
+        <string name="pet_del_title">Deletar Pet</string>
+        <string name="pet_add_title">Adicionar Pet</string>
 
-    <!--Bottom Navigation-->
-    <string-array name="bnav_tab_name">
-        <item>Mapa</item>
-        <item>Pets</item>
-        <item>Calendário</item>
-        <item>Perdidos</item>
-        <item>Configuração</item>
-    </string-array>
+        <!--Bottom Navigation-->
+        <string-array name="bnav_tab_name">
+            <item>Mapa</item>
+            <item>Pets</item>
+            <item>Calendário</item>
+            <item>Perdidos</item>
+            <item>Configuração</item>
+        </string-array>
 
-    <array name="bnav_tab_drawable">
-        <item>@drawable/location_icon</item>
-        <item>@drawable/paw_icon</item>
-        <item>@drawable/calendar_icon</item>
-        <item>@drawable/location_icon</item>
-        <item>@drawable/settings_icon</item>
-    </array>
+        <array name="bnav_tab_drawable">
+            <item>@drawable/location_icon</item>
+            <item>@drawable/paw_icon</item>
+            <item>@drawable/calendar_icon</item>
+            <item>@drawable/location_icon</item>
+            <item>@drawable/settings_icon</item>
+        </array>
 
+    <!--Pet Register-->
+        <string name="pet_image_button_text">Foto</string>
 
     <!--TESTS-->
     <string-array name="animal_names">
@@ -78,24 +99,10 @@
         <item>Narancia</item>
     </string-array>
 
-    <string name="next">PRÓXIMO</string>
-    <string name="skip">PULAR</string>
-    <string name="start">ENTENDI</string>
-
-    <string name="slide_1_title">Monitoramento Total</string>
-    <string name="slide_1_desc">Possibilita monitorar desde consultas veterinárias e datas de vacinas, até nível de atividade, localização, alimentação e sinais vitais.</string>
-
-    <string name="slide_2_title">Auxílio em Fuga</string>
-    <string name="slide_2_desc">Todos os donos próximos à um pet perdido serão notificados para ajudar no resgate se possível.</string>
-
-    <string name="slide_3_title">Mapa Interativo</string>
-    <string name="slide_3_desc">Com o auxílio da própria comunidade, os estabelecimentos, parques, praias e trilhas que permitam pets podem ser verificado no nosso mapa interativo.</string>
-
-    <string name="slide_4_title">Veterinários Também!</string>
-    <string name="slide_4_desc">Todos que amam animais é bem vindo no MiAu, inclusive os veterinários. Eles podem ter uma lista de pacientes de forma a ter um contato contínuo com os pets.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_maps">Map</string>
 
 
 </resources>

@@ -2,9 +2,10 @@ package com.fepa.meupet.model.agent.pet;
 
 import android.widget.ImageView;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Pet {
+public class Pet implements Serializable {
 
     private float age;      // year
     private int height;     // cm

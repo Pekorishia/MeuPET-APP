@@ -1,5 +1,6 @@
 package com.fepa.meupet.view.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,7 +17,9 @@ import android.widget.Toast;
 
 import com.fepa.meupet.R;
 import com.fepa.meupet.control.adapter.PetItemAdapter;
+import com.fepa.meupet.model.agent.pet.Pet;
 import com.fepa.meupet.model.environment.constants.GeneralConfig;
+import com.fepa.meupet.view.activity.RegisterPetActivity;
 
 public class PetListFragment extends ListFragment implements ActionMode.Callback {
 
@@ -61,11 +64,24 @@ public class PetListFragment extends ListFragment implements ActionMode.Callback
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.actPetAdd :
-                Toast.makeText(getContext(), "ADD", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), RegisterPetActivity.class);
+                startActivityForResult(intent,GeneralConfig.PET_ADD_REQUEST_CODE);
                 return true;
 
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == GeneralConfig.PET_ADD_REQUEST_CODE && resultCode == GeneralConfig.RESULT_OK){
+            Pet pet = (Pet) data.getSerializableExtra(GeneralConfig.PET_BUNDLE);
+
+            this.adapter.addItem(pet);
+            this.adapter.notifyDataSetChanged();
+
+            Toast.makeText(getContext(), "Pet Adicionado", Toast.LENGTH_SHORT).show();
         }
     }
 

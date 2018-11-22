@@ -15,7 +15,7 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.aurelhubert.ahbottomnavigation.notification.AHNotification;
 import com.fepa.meupet.R;
 import com.fepa.meupet.control.adapter.BottomBarAdapter;
-import com.fepa.meupet.control.viewpager.CustomSwipePager;
+import com.fepa.meupet.control.general.CustomSwipePager;
 import com.fepa.meupet.model.environment.constants.GeneralConfig;
 import com.fepa.meupet.model.environment.enums.SwipeDirection;
 import com.fepa.meupet.view.fragment.CalendarFragment;

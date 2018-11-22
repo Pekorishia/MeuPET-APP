@@ -1,4 +1,4 @@
-package com.fepa.meupet.control.viewpager;
+package com.fepa.meupet.control.general;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
