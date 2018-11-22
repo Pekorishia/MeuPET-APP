@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MiAu</string>
+    <string name="app_name">MiAU</string>
 
     <!--Common Area-->
     <string name="email_error">Escreva um e-mail válido</string>

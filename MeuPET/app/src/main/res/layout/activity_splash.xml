@@ -23,7 +23,7 @@
         android:layout_below="@+id/ivSplash"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="48dp"
-        android:text="MiAu"
+        android:text="MiAU"
         android:textColor="@color/colorAccent"
         android:textSize="60dp"
         android:fontFamily="@font/ubuntumono_bold"/>
