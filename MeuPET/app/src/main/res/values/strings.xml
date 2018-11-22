@@ -35,14 +35,18 @@
     <!--Bottom Navigation-->
     <string-array name="bnav_tab_name">
         <item>Mapa</item>
-        <item>Meus Pets</item>
+        <item>Pets</item>
+        <item>Calendário</item>
         <item>Perdidos</item>
+        <item>Configuração</item>
     </string-array>
 
     <array name="bnav_tab_drawable">
-        <item>@drawable/map</item>
-        <item>@drawable/paw</item>
-        <item>@drawable/location</item>
+        <item>@drawable/location_icon</item>
+        <item>@drawable/paw_icon</item>
+        <item>@drawable/calendar_icon</item>
+        <item>@drawable/location_icon</item>
+        <item>@drawable/settings_icon</item>
     </array>
 
 
@@ -89,6 +93,9 @@
 
     <string name="slide_4_title">Veterinários Também!</string>
     <string name="slide_4_desc">Todos que amam animais é bem vindo no MiAu, inclusive os veterinários. Eles podem ter uma lista de pacientes de forma a ter um contato contínuo com os pets.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

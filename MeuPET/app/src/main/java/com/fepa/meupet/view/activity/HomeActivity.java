@@ -9,9 +9,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
@@ -21,9 +18,11 @@ import com.fepa.meupet.control.adapter.BottomBarAdapter;
 import com.fepa.meupet.control.viewpager.CustomSwipePager;
 import com.fepa.meupet.model.environment.constants.GeneralConfig;
 import com.fepa.meupet.model.environment.enums.SwipeDirection;
+import com.fepa.meupet.view.fragment.CalendarFragment;
 import com.fepa.meupet.view.fragment.LostPetsFragment;
 import com.fepa.meupet.view.fragment.PetListFragment;
 import com.fepa.meupet.view.fragment.SearchMapFragment;
+import com.fepa.meupet.view.fragment.SettingsFragment;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -69,24 +68,6 @@ public class HomeActivity extends AppCompatActivity {
                 return true;
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.pet_main_action, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.actPetAdd :
-                Toast.makeText(this, "ADD", Toast.LENGTH_SHORT).show();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     private void setupBottomNavigation(){
@@ -160,9 +141,11 @@ public class HomeActivity extends AppCompatActivity {
     private void setupPagerAdapter(){
         this.pagerAdapter = new BottomBarAdapter(getSupportFragmentManager());
 
-        pagerAdapter.addFragments(new SearchMapFragment());
-        pagerAdapter.addFragments(new PetListFragment());
-        pagerAdapter.addFragments(new LostPetsFragment());
+        this.pagerAdapter.addFragments(new SearchMapFragment());
+        this.pagerAdapter.addFragments(new PetListFragment());
+        this.pagerAdapter.addFragments(new CalendarFragment());
+        this.pagerAdapter.addFragments(new LostPetsFragment());
+        this.pagerAdapter.addFragments(new SettingsFragment());
     }
 
     // TODO: detach notification handler from home

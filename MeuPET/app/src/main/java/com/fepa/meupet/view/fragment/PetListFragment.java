@@ -2,10 +2,12 @@ package com.fepa.meupet.view.fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +31,12 @@ public class PetListFragment extends ListFragment implements ActionMode.Callback
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // inflates the layout for this fragment
@@ -41,6 +49,24 @@ public class PetListFragment extends ListFragment implements ActionMode.Callback
         this.listView.setAdapter(adapter);
 
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        getActivity().getMenuInflater().inflate(R.menu.pet_main_action, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.actPetAdd :
+                Toast.makeText(getContext(), "ADD", Toast.LENGTH_SHORT).show();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -64,7 +90,7 @@ public class PetListFragment extends ListFragment implements ActionMode.Callback
         if (this.itemSelected < 0){
             return false;
         }
-//
+
         switch (menuItem.getItemId()){
             case R.id.actPetEdit :
                 Toast.makeText(getContext(), "Editing item", Toast.LENGTH_SHORT).show();
