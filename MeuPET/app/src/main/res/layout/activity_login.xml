@@ -8,21 +8,28 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="56dp"
+        android:paddingTop="20dp"
         android:paddingLeft="24dp"
         android:paddingRight="24dp">
 
-        <!--<ImageView android:src="@drawable/logo"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="72dp"-->
-            <!--android:layout_marginBottom="24dp"-->
-            <!--android:layout_gravity="center_horizontal" />-->
+        <ImageView android:src="@drawable/logo_round_512"
+            android:layout_width="wrap_content"
+            android:layout_height="200sp"
+            android:layout_marginBottom="15dp"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="MiAu"
+            android:textSize="25sp"
+            android:gravity="center"
+            android:fontFamily="@font/ubuntumono_bold"/>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginTop="8dp">
 
             <EditText
                 android:id="@+id/etEmail"
@@ -36,8 +43,7 @@
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginTop="8dp">
 
             <EditText
                 android:id="@+id/etPassword"
@@ -52,8 +58,8 @@
             android:id="@+id/btLogin"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="20dp"
             android:padding="12dp"
             android:onClick="onLoginClick"
             android:text="Login"/>
@@ -67,5 +73,13 @@
             android:onClick="onRegisterClick"
             android:textSize="16sp"/>
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="REPLAY"
+            android:onClick="replay"/>
+
     </LinearLayout>
+
+
 </ScrollView>

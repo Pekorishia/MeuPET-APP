@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MeuPET</string>
+    <string name="app_name">MiAu</string>
 
     <!--Common Area-->
     <string name="email_error">Escreva um e-mail válido</string>
@@ -74,7 +74,21 @@
         <item>Narancia</item>
     </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="next">PRÓXIMO</string>
+    <string name="skip">PULAR</string>
+    <string name="start">ENTENDIDO</string>
+
+    <string name="slide_1_title">Monitoramento Total</string>
+    <string name="slide_1_desc">Possibilita monitorar desde consultas veterinárias e datas de vacinas, até nível de atividade, localização, alimentação e sinais vitais.</string>
+
+    <string name="slide_2_title">Auxílio em Fuga</string>
+    <string name="slide_2_desc">Todos os donos próximos à um pet perdido serão notificados para ajudar no resgate se possível.</string>
+
+    <string name="slide_3_title">Mapa Interativo</string>
+    <string name="slide_3_desc">Com o auxílio da própria comunidade, os estabelecimentos, parques, praias e trilhas que permitam pets podem ser verificado no nosso mapa interativo.</string>
+
+    <string name="slide_4_title">Veterinários Também</string>
+    <string name="slide_4_desc">Todos que amam animais tem um cantinho no MiAu, inclusive os veterinários. Estes tem uma lista de pacientes de forma a ter um contato contínuo com os pets.</string>
+
 
 </resources>
