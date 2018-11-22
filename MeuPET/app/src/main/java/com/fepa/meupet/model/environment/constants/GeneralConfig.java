@@ -2,13 +2,13 @@ package com.fepa.meupet.model.environment.constants;
 
 import android.graphics.Color;
 
-public final class MeuPETConfig {
+public final class GeneralConfig {
 
     // disable instantiation
-    private MeuPETConfig(){}
+    private GeneralConfig(){}
 
     // splash
-    public static final int SPLASH_TIME = 3000;
+    public static final int SPLASH_TIME = 3500;
 
     // login
     public static final int REQUEST_CODE = 0;
@@ -19,6 +19,11 @@ public final class MeuPETConfig {
     // Pet
     public static final boolean MALE = false;
     public static final boolean FEMALE = true;
+
+    // Preference Mode
+    public static final int MODE = 0;
+    public static final String PREFERENCE_NAME = "WelcomeSlider";
+    public static final String IS_FIRST_LAUNCH = "IsFirstTimeLaunch";
 
     // List
     public static final int ITEM_SELECTED_COLOR = Color.rgb(226, 226, 226);

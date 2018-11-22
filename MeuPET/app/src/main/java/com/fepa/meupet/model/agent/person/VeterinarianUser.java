@@ -10,8 +10,8 @@ public class VeterinarianUser extends Person {
     private List<Pet> myPets;
     private List<Pet> myPatients;
 
-    public VeterinarianUser(String name, String phoneNumber) {
-        super(name, phoneNumber);
+    public VeterinarianUser(String phoneNumber) {
+        super(phoneNumber);
         this.myPets = new ArrayList<>();
         this.myPatients = new ArrayList<>();
     }

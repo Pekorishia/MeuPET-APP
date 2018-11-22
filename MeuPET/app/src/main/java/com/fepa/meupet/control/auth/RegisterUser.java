@@ -10,7 +10,7 @@ public final class RegisterUser {
     // disable instantiation
     private RegisterUser(){}
 
-    public static int register (String name, String email, String password, String pwdConfirmation){
+    public static int register (String email, String password, String pwdConfirmation){
 
         if (!validateEmail(email)){
             return RegisterUserResultConfig.INVALID_EMAIL;

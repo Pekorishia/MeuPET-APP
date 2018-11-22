@@ -2,20 +2,10 @@ package com.fepa.meupet.model.agent.person;
 
 public class Person {
 
-    private String name;
     private String phoneNumber;     // its unique
 
-    public Person(String name, String phoneNumber) {
-        this.name = name;
+    public Person(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getPhoneNumber() {

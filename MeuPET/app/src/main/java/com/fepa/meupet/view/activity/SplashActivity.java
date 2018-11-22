@@ -4,12 +4,10 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import com.fepa.meupet.R;
-import com.fepa.meupet.model.environment.constants.MeuPETConfig;
+import com.fepa.meupet.model.environment.constants.GeneralConfig;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -22,20 +20,12 @@ public class SplashActivity extends AppCompatActivity {
 
         ivSplash = this.findViewById(R.id.ivSplash);
 
-        // creates a fade in animation
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
-
-        // puts the animation inside all splash views
-        ivSplash.startAnimation(animation);
-
         // after a specified time start this handler thread
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                // TODO: calls home if the user is already created
-
-                // goes to loginActivity
-                Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                // goes to the welcome slider
+                Intent loginIntent = new Intent(getApplicationContext(), SliderIntroActivity.class);
                 startActivity(loginIntent);
 
                 // makes the activity transition smooth
@@ -43,6 +33,6 @@ public class SplashActivity extends AppCompatActivity {
 
                 finish();
             }
-        }, MeuPETConfig.SPLASH_TIME);
+        }, GeneralConfig.SPLASH_TIME);
     }
 }

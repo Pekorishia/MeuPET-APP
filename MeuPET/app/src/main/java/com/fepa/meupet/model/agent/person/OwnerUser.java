@@ -9,8 +9,8 @@ public class OwnerUser extends Person {
 
     private List<Pet> myPets;
 
-    public OwnerUser(String name, String phoneNumber) {
-        super(name, phoneNumber);
+    public OwnerUser( String phoneNumber) {
+        super(phoneNumber);
         this.myPets = new ArrayList<>();
     }
 

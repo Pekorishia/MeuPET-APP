@@ -19,7 +19,7 @@ import com.aurelhubert.ahbottomnavigation.notification.AHNotification;
 import com.fepa.meupet.R;
 import com.fepa.meupet.control.adapter.BottomBarAdapter;
 import com.fepa.meupet.control.viewpager.NoSwipePager;
-import com.fepa.meupet.model.environment.constants.MeuPETConfig;
+import com.fepa.meupet.model.environment.constants.GeneralConfig;
 import com.fepa.meupet.view.fragment.LostPetsFragment;
 import com.fepa.meupet.view.fragment.PetListFragment;
 import com.fepa.meupet.view.fragment.SearchMapFragment;
@@ -104,7 +104,7 @@ public class HomeActivity extends AppCompatActivity {
         this.addBottomNavigationItems();
 
         // sets the home screen start item
-        this.bottomNavigation.setCurrentItem(MeuPETConfig.START_BOTTOM_NAV_TAB);
+        this.bottomNavigation.setCurrentItem(GeneralConfig.START_BOTTOM_NAV_TAB);
     }
 
     public void setupBottomNavBehaviors() {
@@ -161,7 +161,7 @@ public class HomeActivity extends AppCompatActivity {
         // attaches the pageAdapter as the viewPager adapter
         this.viewPager.setAdapter(this.pagerAdapter);
 
-        viewPager.setCurrentItem(MeuPETConfig.START_BOTTOM_NAV_TAB);
+        viewPager.setCurrentItem(GeneralConfig.START_BOTTOM_NAV_TAB);
     }
 
     private void setupPagerAdapter(){

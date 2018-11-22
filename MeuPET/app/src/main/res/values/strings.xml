@@ -76,7 +76,7 @@
 
     <string name="next">PRÓXIMO</string>
     <string name="skip">PULAR</string>
-    <string name="start">ENTENDIDO</string>
+    <string name="start">ENTENDI</string>
 
     <string name="slide_1_title">Monitoramento Total</string>
     <string name="slide_1_desc">Possibilita monitorar desde consultas veterinárias e datas de vacinas, até nível de atividade, localização, alimentação e sinais vitais.</string>
@@ -87,8 +87,8 @@
     <string name="slide_3_title">Mapa Interativo</string>
     <string name="slide_3_desc">Com o auxílio da própria comunidade, os estabelecimentos, parques, praias e trilhas que permitam pets podem ser verificado no nosso mapa interativo.</string>
 
-    <string name="slide_4_title">Veterinários Também</string>
-    <string name="slide_4_desc">Todos que amam animais tem um cantinho no MiAu, inclusive os veterinários. Estes tem uma lista de pacientes de forma a ter um contato contínuo com os pets.</string>
+    <string name="slide_4_title">Veterinários Também!</string>
+    <string name="slide_4_desc">Todos que amam animais é bem vindo no MiAu, inclusive os veterinários. Eles podem ter uma lista de pacientes de forma a ter um contato contínuo com os pets.</string>
 
 
 </resources>

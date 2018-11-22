@@ -73,12 +73,6 @@
             android:onClick="onRegisterClick"
             android:textSize="16sp"/>
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="REPLAY"
-            android:onClick="replay"/>
-
     </LinearLayout>
 
 

@@ -15,7 +15,6 @@ import com.fepa.meupet.model.environment.constants.RegisterUserResultConfig;
 
 public class RegisterUserActivity extends AppCompatActivity {
 
-    private EditText etName;
     private EditText etEmail;
     private EditText etPassword;
     private EditText etConfirmPwd;
@@ -27,7 +26,6 @@ public class RegisterUserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_user);
 
-        this.etName = this.findViewById(R.id.etUserName);
         this.etEmail = this.findViewById(R.id.etRegisterEmail);
         this.etPassword = this.findViewById(R.id.etRegisterPwd);
         this.etConfirmPwd = this.findViewById(R.id.etConfirmRegisterPwd);
@@ -45,7 +43,6 @@ public class RegisterUserActivity extends AppCompatActivity {
 
         // gets the response value from register
         int response = RegisterUser.register(
-                this.etName.getText().toString(),
                 this.etEmail.getText().toString(),
                 this.etPassword.getText().toString(),
                 this.etConfirmPwd.getText().toString()

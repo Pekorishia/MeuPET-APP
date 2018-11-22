@@ -11,8 +11,9 @@ import android.widget.Toast;
 
 import com.fepa.meupet.R;
 import com.fepa.meupet.control.auth.Login;
+import com.fepa.meupet.control.general.PreferenceManager;
 import com.fepa.meupet.model.environment.constants.LoginResultConfig;
-import com.fepa.meupet.model.environment.constants.MeuPETConfig;
+import com.fepa.meupet.model.environment.constants.GeneralConfig;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -38,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     public void onRegisterClick(View view) {
         Intent registerIntent = new Intent(getApplicationContext(), RegisterUserActivity.class);
-        startActivityForResult(registerIntent, MeuPETConfig.REQUEST_CODE);
+        startActivityForResult(registerIntent, GeneralConfig.REQUEST_CODE);
     }
 
     /**
@@ -111,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == MeuPETConfig.REQUEST_CODE){
+        if (requestCode == GeneralConfig.REQUEST_CODE){
             // if the registration went well
             if (resultCode == RESULT_OK){
                 // starts the home activity

@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.fepa.meupet.R;
 import com.fepa.meupet.control.adapter.PetItemAdapter;
-import com.fepa.meupet.model.environment.constants.MeuPETConfig;
+import com.fepa.meupet.model.environment.constants.GeneralConfig;
 
 public class PetListFragment extends ListFragment implements ActionMode.Callback {
 
@@ -109,7 +109,7 @@ public class PetListFragment extends ListFragment implements ActionMode.Callback
             this.itemSelected = position;
 
             // updates item color
-            this.setItemColor(this.itemSelected, MeuPETConfig.ITEM_SELECTED_COLOR);
+            this.setItemColor(this.itemSelected, GeneralConfig.ITEM_SELECTED_COLOR);
 
             // starts the action mode
             getActivity().startActionMode(this);
