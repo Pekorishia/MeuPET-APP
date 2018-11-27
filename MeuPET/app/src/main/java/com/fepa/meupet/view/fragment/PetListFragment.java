@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -140,7 +141,7 @@ public class PetListFragment extends ListFragment implements ActionMode.Callback
 
         // resets every item to not selected state color
         for (int i = 0; i < LISTVIEW_SIZE; i++) {
-            this.setItemColor(i, Color.TRANSPARENT);
+            this.listView.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
         }
 
         // resets the item selected position
@@ -153,10 +154,10 @@ public class PetListFragment extends ListFragment implements ActionMode.Callback
 
         // if no item was selected
         if (this.itemSelected < 0){
+
             // selects item
             this.itemSelected = position;
 
-            Toast.makeText(getContext(), "Item Click: " + this.itemSelected, Toast.LENGTH_SHORT).show();
             // updates item color
             this.setItemColor(this.itemSelected, GeneralConfig.ITEM_SELECTED_COLOR);
 
@@ -164,8 +165,8 @@ public class PetListFragment extends ListFragment implements ActionMode.Callback
             getActivity().startActionMode(this);
 
         } else if (this.itemSelected == position){
-            // updates item color
 
+            // updates item color
             this.setItemColor(this.itemSelected, Color.TRANSPARENT);
 
             // deselects item
@@ -175,7 +176,22 @@ public class PetListFragment extends ListFragment implements ActionMode.Callback
     }
 
     private void setItemColor(int position, int color){
-        this.listView.getChildAt(position).setBackgroundColor(color);
+        int wantedPosition = this.getListViewItemPosition(position);
+        if (wantedPosition == -1){
+            return;
+        }
+        this.listView.getChildAt(wantedPosition).setBackgroundColor(color);
 
+    }
+
+    private int getListViewItemPosition(int wantedPosition){
+        int firstPosition = listView.getFirstVisiblePosition() - listView.getHeaderViewsCount();
+
+        int relativePosition = wantedPosition - firstPosition;
+
+        if (relativePosition < 0 || relativePosition >= listView.getChildCount()) {
+            return -1;
+        }
+        return relativePosition;
     }
 }

@@ -16,6 +16,11 @@ public class PetItemAdapter extends BaseAdapter {
     private ArrayAdapter<Pet> petList;
     private Context context;
 
+    private static class ViewHolder {
+        public TextView text;
+        public ImageView image;
+    }
+
 
     public PetItemAdapter(Context context){
         this.context = context;
@@ -68,15 +73,19 @@ public class PetItemAdapter extends BaseAdapter {
 
         if (view == null){
             view = View.inflate(context, R.layout.fragment_pet_list_item, null);
+            // configures view holder
+            ViewHolder viewHolder = new ViewHolder();
+            viewHolder.text = view.findViewById(R.id.tvPetRowItem);
+            viewHolder.image = view.findViewById(R.id.ivPetRowItem);
+            view.setTag(viewHolder);
         }
 
         Pet pet = petList.getItem(i);
 
-        ImageView ivImage = view.findViewById(R.id.ivPetRowItem);
-        TextView tvName = view.findViewById(R.id.tvPetRowItem);
-
-        ivImage.setImageResource(R.mipmap.ic_launcher_round);
-        tvName.setText(pet.getName());
+        // fills data
+        ViewHolder holder = (ViewHolder) view.getTag();
+        holder.image.setImageResource(R.mipmap.ic_launcher_round);
+        holder.text.setText(pet.getName());
 
         return view;
     }
