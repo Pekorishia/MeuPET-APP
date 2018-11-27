@@ -5,7 +5,6 @@
     <string name="email_error">Escreva um e-mail válido</string>
     <string name="pwd_error">No mínimo 4 caracteres</string>
 
-
     <!--Hints-->
     <string name="password_confirm_hint_text">Confirme a Senha</string>
     <string name="password_hint_text">Senha</string>
@@ -83,20 +82,6 @@
         <item>Yeti</item>
         <item>Kiro</item>
         <item>Simba</item>
-        <item>Sharla</item>
-        <item>Ayka</item>
-        <item>Kirara</item>
-        <item>Erika</item>
-        <item>Erza</item>
-        <item>Nukka</item>
-        <item>Kira</item>
-        <item>Dio</item>
-        <item>Diorno</item>
-        <item>Joseph</item>
-        <item>Jotarou</item>
-        <item>Jonathan</item>
-        <item>Josuke</item>
-        <item>Narancia</item>
     </string-array>
 
 

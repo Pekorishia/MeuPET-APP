@@ -51,6 +51,9 @@ public class PetListFragment extends ListFragment implements ActionMode.Callback
         this.adapter = new PetItemAdapter(getContext());
         this.listView.setAdapter(adapter);
 
+        // Set the emptyView to the ListView
+        listView.setEmptyView(getActivity().findViewById(R.id.emptyElement));
+
         return view;
     }
 
@@ -153,6 +156,7 @@ public class PetListFragment extends ListFragment implements ActionMode.Callback
             // selects item
             this.itemSelected = position;
 
+            Toast.makeText(getContext(), "Item Click: " + this.itemSelected, Toast.LENGTH_SHORT).show();
             // updates item color
             this.setItemColor(this.itemSelected, GeneralConfig.ITEM_SELECTED_COLOR);
 
@@ -161,6 +165,7 @@ public class PetListFragment extends ListFragment implements ActionMode.Callback
 
         } else if (this.itemSelected == position){
             // updates item color
+
             this.setItemColor(this.itemSelected, Color.TRANSPARENT);
 
             // deselects item

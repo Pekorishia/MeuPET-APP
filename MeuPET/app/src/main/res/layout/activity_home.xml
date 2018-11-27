@@ -5,6 +5,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!--My Fragment Swipe Pager-->
     <com.fepa.meupet.control.general.CustomSwipePager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
