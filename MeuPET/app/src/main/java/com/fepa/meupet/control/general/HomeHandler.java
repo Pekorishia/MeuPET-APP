@@ -3,7 +3,6 @@ package com.fepa.meupet.control.general;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.os.Handler;
 import android.support.annotation.ColorRes;
 import android.support.v4.content.ContextCompat;
@@ -12,7 +11,6 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.aurelhubert.ahbottomnavigation.notification.AHNotification;
 import com.fepa.meupet.R;
 import com.fepa.meupet.control.adapter.BottomBarAdapter;
-import com.fepa.meupet.control.general.CustomSwipePager;
 import com.fepa.meupet.model.environment.constants.GeneralConfig;
 import com.fepa.meupet.model.environment.enums.SwipeDirection;
 import com.fepa.meupet.view.fragment.CalendarFragment;
@@ -20,6 +18,7 @@ import com.fepa.meupet.view.fragment.LostPetsFragment;
 import com.fepa.meupet.view.fragment.PetListFragment;
 import com.fepa.meupet.view.fragment.SearchMapFragment;
 import com.fepa.meupet.view.fragment.SettingsFragment;
+import com.google.android.gms.maps.SupportMapFragment;
 
 public class HomeHandler {
 

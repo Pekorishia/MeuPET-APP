@@ -45,30 +45,30 @@
 
 
     <!--Home-->
-        <!--Pet Edit Menu-->
-        <string name="pet_edit_title">Editar Pet</string>
-        <string name="pet_del_title">Deletar Pet</string>
-        <string name="pet_add_title">Adicionar Pet</string>
+    <!--Pet Edit Menu-->
+    <string name="pet_edit_title">Editar Pet</string>
+    <string name="pet_del_title">Deletar Pet</string>
+    <string name="pet_add_title">Adicionar Pet</string>
 
-        <!--Bottom Navigation-->
-        <string-array name="bnav_tab_name">
-            <item>Mapa</item>
-            <item>Pets</item>
-            <item>Calendário</item>
-            <item>Perdidos</item>
-            <item>Configuração</item>
-        </string-array>
+    <!--Bottom Navigation-->
+    <string-array name="bnav_tab_name">
+        <item>Mapa</item>
+        <item>Pets</item>
+        <item>Calendário</item>
+        <item>Perdidos</item>
+        <item>Configuração</item>
+    </string-array>
 
-        <array name="bnav_tab_drawable">
-            <item>@drawable/location_icon</item>
-            <item>@drawable/paw_icon</item>
-            <item>@drawable/calendar_icon</item>
-            <item>@drawable/location_icon</item>
-            <item>@drawable/settings_icon</item>
-        </array>
+    <array name="bnav_tab_drawable">
+        <item>@drawable/location_icon</item>
+        <item>@drawable/paw_icon</item>
+        <item>@drawable/calendar_icon</item>
+        <item>@drawable/location_icon</item>
+        <item>@drawable/settings_icon</item>
+    </array>
 
     <!--Pet Register-->
-        <string name="pet_image_button_text">Foto</string>
+    <string name="pet_image_button_text">Foto</string>
 
     <!--TESTS-->
     <string-array name="animal_names">

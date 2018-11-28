@@ -1,71 +1,84 @@
 package com.fepa.meupet.view.fragment;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
+
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ListFragment;
+import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.Toast;
 
 import com.fepa.meupet.R;
-import com.fepa.meupet.control.general.Geolocation;
-import com.fepa.meupet.model.environment.constants.GeneralConfig;
-import com.fepa.meupet.view.activity.MapsActivity;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.HashMap;
-import java.util.Map;
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class SearchMapFragment extends android.support.v4.app.Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener {
 
-
-public class SearchMapFragment extends ListFragment {
-
-    // maps <place name, location>
-    private Map<String, Geolocation> locations = new HashMap<>();
-    private ArrayAdapter<String> adapter;
+    private GoogleMap map;
 
     public SearchMapFragment() {
         // Required empty public constructor
     }
 
+
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_search_map, container, false);
 
-        this.adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1);
+        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
+                .findFragmentById(R.id.mapSearch);
+        mapFragment.getMapAsync(this);
+        return view;
+    }
 
-        this.setupLocations();
 
-        setListAdapter(adapter);
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+//        this.map = googleMap;
+//
+//        Toast.makeText(getContext(), "ENTREI", Toast.LENGTH_SHORT).show();
+//
+//        // Add a marker in Sydney and move the camera
+//        LatLng place = new LatLng(-34, 151);
+//
+//        this.map.addMarker(new MarkerOptions().position(place).title("Sidney"));
+//        this.map.moveCamera(CameraUpdateFactory.newLatLngZoom(place,12));
+
+        map = googleMap;
+
+        // shows both the satellite and the places name
+        map.setMapType(googleMap.MAP_TYPE_HYBRID);
+
+        // shows the zoom buttons on the corner of the map
+        map.getUiSettings().setZoomControlsEnabled(true);
+
+        map.setOnMapClickListener(this);
+        map.setOnMapLongClickListener(this);
+
+        // Add a marker in Sydney and move the camera
+        LatLng sydney = new LatLng(-34, 151);
+        map.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        String text = String.format("(%.4f, %4f)", latLng.latitude, latLng.longitude);
+
+        Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        String placeName = this.adapter.getItem(position);
-        Geolocation location = this.locations.get(placeName);
-
-        Intent intent = new Intent(getContext(), MapsActivity.class);
-        intent.putExtra(GeneralConfig.PLACE_NAME_KEY, placeName);
-        intent.putExtra(GeneralConfig.PLACE_LOCATION_KEY, location);
-
-        startActivity(intent);
-    }
-
-    // TODO: MAKE IT DYNAMICALLY
-    private void setupLocations(){
-        locations.put("Natal",new Geolocation(-5.7792569,-35.200916));
-        locations.put("João Pessoa",new Geolocation(-7.1194958,-34.8450118));
-        locations.put("Salvador",new Geolocation(-12.9722184,-38.5014136));
-        locations.put("Recife",new Geolocation(-8.0475622,-34.8769643));
-        locations.put("Teresina",new Geolocation(-5.0920108,-42.8037597));
-        locations.put("Aracajú",new Geolocation(-10.9472468,-37.7089492));
-        locations.put("Maceió",new Geolocation(-9.6498587,-35.7089492));
-        locations.put("São Luís",new Geolocation(-2.5391099,-44.2829046));
-        locations.put("Fortaleza",new Geolocation(-3.7319029,-38.5267393));
-
-        adapter.addAll(this.locations.keySet());
+    public void onMapLongClick(LatLng latLng) {
+        Toast.makeText(getContext(), latLng.toString(), Toast.LENGTH_SHORT).show();
     }
 }
