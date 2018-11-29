@@ -34,17 +34,12 @@ public class SearchMapFilterDialog extends DialogFragment implements DialogInter
                         Intent intent = new Intent();
                         intent.putExtra(GeneralConfig.SEARCH_MAP_BUNDLE, checkList);
 
-                        // resets checklist
-                        checkList = new boolean[options.length];
-
                         getTargetFragment().onActivityResult(getTargetRequestCode(), GeneralConfig.RESULT_OK, intent);
                     }
                 })
                 .setNegativeButton(R.string.smap_dialog_negative, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // resets checklist
-                        checkList = new boolean[options.length];
                         dismiss();
                     }
                 })

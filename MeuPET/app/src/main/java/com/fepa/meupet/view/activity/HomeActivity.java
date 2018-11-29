@@ -1,5 +1,6 @@
 package com.fepa.meupet.view.activity;
 
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
@@ -11,6 +12,11 @@ import com.fepa.meupet.control.general.HomeHandler;
 public class HomeActivity extends AppCompatActivity {
 
     private HomeHandler handler;
+
+//    @Override
+//    public void onRestoreInstanceState(Bundle savedInstanceState, PersistableBundle persistentState) {
+//        super.onRestoreInstanceState(savedInstanceState, persistentState);
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
