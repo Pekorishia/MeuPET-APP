@@ -10,7 +10,7 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="@dimen/both_bottom_nav_height"
         tools:context=".view.activity.HomeActivity" />
 
 </RelativeLayout>

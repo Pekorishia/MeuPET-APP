@@ -21,8 +21,8 @@ public final class GeneralConfig {
     // Pet
     public static final boolean MALE = false;
     public static final boolean FEMALE = true;
-    public static final String PET_BUNDLE = "petBundle";
     public static final int PET_ADD_REQUEST_CODE = 10;
+    public static final String PET_BUNDLE = "petBundle";
 
     // Preference Mode
     public static final int MODE = 0;
@@ -30,7 +30,9 @@ public final class GeneralConfig {
     public static final String IS_FIRST_LAUNCH = "IsFirstTimeLaunch";
 
     // Maps
+    public static final int SEARCH_MAP_REQUEST_CODE = 10;
     public static final String PLACE_NAME_KEY = "placeName";
+    public static final String SEARCH_MAP_BUNDLE = "mapBundle";
     public static final String PLACE_LOCATION_KEY = "placeLocation";
 
     // List

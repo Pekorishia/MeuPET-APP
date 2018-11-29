@@ -40,15 +40,6 @@
     <string name="password_mismatch_error">As senhas não batem</string>
     <string name="register_error">Erro ao Registrar</string>
 
-    <!--Register Pet-->
-    <string name="pet_register_bt_text">Salvar</string>
-
-
-    <!--Home-->
-    <!--Pet Edit Menu-->
-    <string name="pet_edit_title">Editar Pet</string>
-    <string name="pet_del_title">Deletar Pet</string>
-    <string name="pet_add_title">Adicionar Pet</string>
 
     <!--Bottom Navigation-->
     <string-array name="bnav_tab_name">
@@ -67,8 +58,33 @@
         <item>@drawable/settings_icon</item>
     </array>
 
+    <!--Search Map Menu-->
+    <string name="smap_filter_title">Filtros</string>
+
+    <!--Search Map Dialog-->
+    <string name="smap_dialog_title">Escolha os filtros para o mapa</string>
+    <array name="smap_dialog_options">
+        <item>Veterinarios</item>
+        <item>Restaurantes</item>
+        <item>Praias</item>
+        <item>Shoppings</item>
+        <item>Hotéis</item>
+    </array>
+    <string name="smap_dialog_positive">Salvar</string>
+    <string name="smap_dialog_negative">Cancelar</string>
+
+
+    <!--Register Pet-->
+    <string name="pet_register_bt_text">Salvar</string>
+
+    <!--Pet Edit Menu-->
+    <string name="pet_edit_title">Editar Pet</string>
+    <string name="pet_del_title">Deletar Pet</string>
+    <string name="pet_add_title">Adicionar Pet</string>
+
     <!--Pet Register-->
     <string name="pet_image_button_text">Foto</string>
+
 
     <!--TESTS-->
     <string-array name="animal_names">
@@ -83,7 +99,6 @@
         <item>Kiro</item>
         <item>Simba</item>
     </string-array>
-
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

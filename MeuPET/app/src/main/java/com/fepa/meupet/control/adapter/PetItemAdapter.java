@@ -72,7 +72,7 @@ public class PetItemAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
 
         if (view == null){
-            view = View.inflate(context, R.layout.fragment_pet_list_item, null);
+            view = View.inflate(context, R.layout.pet_list_item, null);
             // configures view holder
             ViewHolder viewHolder = new ViewHolder();
             viewHolder.text = view.findViewById(R.id.tvPetRowItem);
