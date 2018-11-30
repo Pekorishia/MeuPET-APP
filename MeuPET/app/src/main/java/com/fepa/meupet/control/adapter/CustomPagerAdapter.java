@@ -6,16 +6,11 @@ import android.support.v4.app.FragmentManager;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * BottomNav
- * Created by Suleiman19 on 6/12/17.
- * Copyright (c) 2017. Suleiman Ali Shakir. All rights reserved.
- */
 
-public class BottomBarAdapter extends SmartFragmentStatePagerAdapter {
+public class CustomPagerAdapter extends SmartFragmentStatePagerAdapter {
     private final List<Fragment> fragments = new ArrayList<>();
 
-    public BottomBarAdapter(FragmentManager fragmentManager) {
+    public CustomPagerAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
     }
     // Our custom method that populates this Adapter with Fragments

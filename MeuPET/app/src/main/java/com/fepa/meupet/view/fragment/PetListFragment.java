@@ -52,9 +52,6 @@ public class PetListFragment extends ListFragment implements ActionMode.Callback
         this.adapter = new PetItemAdapter(getContext());
         this.listView.setAdapter(adapter);
 
-        // Set the emptyView to the ListView
-        listView.setEmptyView(getActivity().findViewById(R.id.emptyElement));
-
         return view;
     }
 

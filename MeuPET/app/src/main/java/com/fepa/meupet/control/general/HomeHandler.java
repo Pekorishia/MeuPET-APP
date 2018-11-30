@@ -10,21 +10,20 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.aurelhubert.ahbottomnavigation.notification.AHNotification;
 import com.fepa.meupet.R;
-import com.fepa.meupet.control.adapter.BottomBarAdapter;
+import com.fepa.meupet.control.adapter.CustomPagerAdapter;
 import com.fepa.meupet.model.environment.constants.GeneralConfig;
 import com.fepa.meupet.model.environment.enums.SwipeDirection;
 import com.fepa.meupet.view.fragment.CalendarFragment;
 import com.fepa.meupet.view.fragment.LostPetsFragment;
-import com.fepa.meupet.view.fragment.PetListFragment;
+import com.fepa.meupet.view.fragment.PetFragment;
 import com.fepa.meupet.view.fragment.SearchMapFragment;
 import com.fepa.meupet.view.fragment.SettingsFragment;
-import com.google.android.gms.maps.SupportMapFragment;
 
 public class HomeHandler {
 
     private Activity activity;
     private CustomSwipePager viewPager;
-    private BottomBarAdapter pagerAdapter;
+    private CustomPagerAdapter pagerAdapter;
     private AHBottomNavigation bottomNavigation;
 
     public HomeHandler(Activity activity){
@@ -56,7 +55,7 @@ public class HomeHandler {
             this.viewPager.setCurrentItem(position);
     }
 
-    public void setupViewPagerAndPagerAdapter(CustomSwipePager viewPager, BottomBarAdapter pagerAdapter) {
+    public void setupViewPagerAndPagerAdapter(CustomSwipePager viewPager, CustomPagerAdapter pagerAdapter) {
         this.viewPager = viewPager;
 
         // disables swiping
@@ -82,11 +81,11 @@ public class HomeHandler {
         this.bottomNavigation.setCurrentItem(GeneralConfig.START_BOTTOM_NAV_TAB);
     }
 
-    private void setupPagerAdapter(BottomBarAdapter pagerAdapter){
+    private void setupPagerAdapter(CustomPagerAdapter pagerAdapter){
         this.pagerAdapter = pagerAdapter;
 
         this.pagerAdapter.addFragments(new SearchMapFragment());
-        this.pagerAdapter.addFragments(new PetListFragment());
+        this.pagerAdapter.addFragments(new PetFragment());
         this.pagerAdapter.addFragments(new CalendarFragment());
         this.pagerAdapter.addFragments(new LostPetsFragment());
         this.pagerAdapter.addFragments(new SettingsFragment());

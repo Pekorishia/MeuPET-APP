@@ -1,22 +1,16 @@
 package com.fepa.meupet.view.activity;
 
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.fepa.meupet.R;
-import com.fepa.meupet.control.adapter.BottomBarAdapter;
+import com.fepa.meupet.control.adapter.CustomPagerAdapter;
 import com.fepa.meupet.control.general.CustomSwipePager;
 import com.fepa.meupet.control.general.HomeHandler;
 
 public class HomeActivity extends AppCompatActivity {
 
     private HomeHandler handler;
-
-//    @Override
-//    public void onRestoreInstanceState(Bundle savedInstanceState, PersistableBundle persistentState) {
-//        super.onRestoreInstanceState(savedInstanceState, persistentState);
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +19,7 @@ public class HomeActivity extends AppCompatActivity {
 
         CustomSwipePager viewPager = this.findViewById(R.id.viewPager);
         AHBottomNavigation bottomNavigation = this.findViewById(R.id.bottom_navigation);
-        BottomBarAdapter pagerAdapter = new BottomBarAdapter(getSupportFragmentManager());
+        CustomPagerAdapter pagerAdapter = new CustomPagerAdapter(getSupportFragmentManager());
 
         this.handler = new HomeHandler(this);
 

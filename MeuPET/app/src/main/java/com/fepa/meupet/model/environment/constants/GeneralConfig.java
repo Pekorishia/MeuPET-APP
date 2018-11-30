@@ -21,6 +21,7 @@ public final class GeneralConfig {
     // Pet
     public static final boolean MALE = false;
     public static final boolean FEMALE = true;
+    public static final int START_PET_TAB = 0;
     public static final int PET_ADD_REQUEST_CODE = 10;
     public static final String PET_BUNDLE = "petBundle";
 
@@ -31,9 +32,7 @@ public final class GeneralConfig {
 
     // Maps
     public static final int SEARCH_MAP_REQUEST_CODE = 10;
-    public static final String PLACE_NAME_KEY = "placeName";
     public static final String SEARCH_MAP_BUNDLE = "mapBundle";
-    public static final String PLACE_LOCATION_KEY = "placeLocation";
 
     // List
     public static final int ITEM_SELECTED_COLOR = Color.rgb(226, 226, 226);
