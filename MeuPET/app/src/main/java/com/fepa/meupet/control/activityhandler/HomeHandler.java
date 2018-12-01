@@ -1,4 +1,4 @@
-package com.fepa.meupet.control.general;
+package com.fepa.meupet.control.activityhandler;
 
 import android.app.Activity;
 import android.content.res.Resources;
@@ -11,11 +11,13 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.aurelhubert.ahbottomnavigation.notification.AHNotification;
 import com.fepa.meupet.R;
 import com.fepa.meupet.control.adapter.CustomPagerAdapter;
+import com.fepa.meupet.control.general.CustomSwipePager;
 import com.fepa.meupet.model.environment.constants.GeneralConfig;
 import com.fepa.meupet.model.environment.enums.SwipeDirection;
 import com.fepa.meupet.view.fragment.CalendarFragment;
 import com.fepa.meupet.view.fragment.LostPetsFragment;
 import com.fepa.meupet.view.fragment.PetFragment;
+import com.fepa.meupet.view.fragment.PetListFragment;
 import com.fepa.meupet.view.fragment.SearchMapFragment;
 import com.fepa.meupet.view.fragment.SettingsFragment;
 
@@ -85,7 +87,7 @@ public class HomeHandler {
         this.pagerAdapter = pagerAdapter;
 
         this.pagerAdapter.addFragments(new SearchMapFragment());
-        this.pagerAdapter.addFragments(new PetFragment());
+        this.pagerAdapter.addFragments(new PetListFragment());
         this.pagerAdapter.addFragments(new CalendarFragment());
         this.pagerAdapter.addFragments(new LostPetsFragment());
         this.pagerAdapter.addFragments(new SettingsFragment());

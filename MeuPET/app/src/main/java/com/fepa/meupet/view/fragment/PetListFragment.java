@@ -66,7 +66,7 @@ public class PetListFragment extends ListFragment implements ActionMode.Callback
         switch (item.getItemId()){
             case R.id.actPetAdd :
                 Intent intent = new Intent(getContext(), RegisterPetActivity.class);
-                startActivityForResult(intent,GeneralConfig.PET_ADD_REQUEST_CODE);
+                startActivityForResult(intent,GeneralConfig.Pets.PET_ADD_REQUEST_CODE);
                 return true;
 
             default:
@@ -76,8 +76,8 @@ public class PetListFragment extends ListFragment implements ActionMode.Callback
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == GeneralConfig.PET_ADD_REQUEST_CODE && resultCode == GeneralConfig.RESULT_OK){
-            Pet pet = (Pet) data.getSerializableExtra(GeneralConfig.PET_BUNDLE);
+        if(requestCode == GeneralConfig.Pets.PET_ADD_REQUEST_CODE && resultCode == GeneralConfig.RESULT_OK){
+            Pet pet = (Pet) data.getSerializableExtra(GeneralConfig.Pets.PET_BUNDLE);
 
             this.adapter.addItem(pet);
             this.adapter.notifyDataSetChanged();

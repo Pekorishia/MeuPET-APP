@@ -47,7 +47,7 @@ public class PetFragment extends Fragment {
         // attaches the pageAdapter as the viewPager adapter
         this.viewPager.setAdapter(this.adapter);
 
-        viewPager.setCurrentItem(GeneralConfig.START_PET_TAB);
+        viewPager.setCurrentItem(GeneralConfig.Pets.START_PET_TAB);
     }
 
     private void setupPagerAdapter(){

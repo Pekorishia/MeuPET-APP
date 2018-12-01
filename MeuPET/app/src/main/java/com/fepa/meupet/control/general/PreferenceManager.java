@@ -12,17 +12,17 @@ public class PreferenceManager {
 
     public PreferenceManager(Context context) {
         this._context = context;
-        pref = _context.getSharedPreferences(GeneralConfig.PREFERENCE_NAME, GeneralConfig.MODE);
+        pref = _context.getSharedPreferences(GeneralConfig.Preferences.PREFERENCE_NAME, GeneralConfig.Preferences.MODE);
         editor = pref.edit();
     }
 
     public void setFirstTimeLaunch(boolean isFirstTime) {
-        editor.putBoolean(GeneralConfig.IS_FIRST_LAUNCH, isFirstTime);
+        editor.putBoolean(GeneralConfig.Preferences.IS_FIRST_LAUNCH, isFirstTime);
         editor.commit();
     }
 
     public boolean isFirstTimeLaunch() {
-        return pref.getBoolean(GeneralConfig.IS_FIRST_LAUNCH, true);
+        return pref.getBoolean(GeneralConfig.Preferences.IS_FIRST_LAUNCH, true);
     }
 
 }

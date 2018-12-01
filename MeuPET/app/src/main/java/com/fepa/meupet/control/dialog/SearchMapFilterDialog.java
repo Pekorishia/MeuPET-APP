@@ -32,7 +32,7 @@ public class SearchMapFilterDialog extends DialogFragment implements DialogInter
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent intent = new Intent();
-                        intent.putExtra(GeneralConfig.SEARCH_MAP_BUNDLE, checkList);
+                        intent.putExtra(GeneralConfig.Maps.SEARCH_MAP_BUNDLE, checkList);
 
                         getTargetFragment().onActivityResult(getTargetRequestCode(), GeneralConfig.RESULT_OK, intent);
                     }

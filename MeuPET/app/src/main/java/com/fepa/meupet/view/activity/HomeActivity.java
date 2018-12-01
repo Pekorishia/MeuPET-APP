@@ -6,7 +6,7 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.fepa.meupet.R;
 import com.fepa.meupet.control.adapter.CustomPagerAdapter;
 import com.fepa.meupet.control.general.CustomSwipePager;
-import com.fepa.meupet.control.general.HomeHandler;
+import com.fepa.meupet.control.activityhandler.HomeHandler;
 
 public class HomeActivity extends AppCompatActivity {
 

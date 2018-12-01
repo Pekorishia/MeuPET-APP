@@ -121,7 +121,7 @@ public class SearchMapFragment extends android.support.v4.app.Fragment implement
         switch (item.getItemId()){
             case R.id.actSMapFilter :
                 SearchMapFilterDialog multiple = new SearchMapFilterDialog();
-                multiple.setTargetFragment(this, GeneralConfig.SEARCH_MAP_REQUEST_CODE);
+                multiple.setTargetFragment(this, GeneralConfig.Maps.SEARCH_MAP_REQUEST_CODE);
                 multiple.show(getActivity().getSupportFragmentManager(),"dialogMultiple");
                 return true;
 
@@ -133,11 +133,11 @@ public class SearchMapFragment extends android.support.v4.app.Fragment implement
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode ==  GeneralConfig.SEARCH_MAP_REQUEST_CODE
+        if(requestCode ==  GeneralConfig.Maps.SEARCH_MAP_REQUEST_CODE
                 && resultCode == GeneralConfig.RESULT_OK){
 
             // gets the boolean vector that marks each checked option
-            boolean[] result = data.getBooleanArrayExtra(GeneralConfig.SEARCH_MAP_BUNDLE);
+            boolean[] result = data.getBooleanArrayExtra(GeneralConfig.Maps.SEARCH_MAP_BUNDLE);
 
             for (int i = 0; i < result.length; i++) {
                 if (result[i])

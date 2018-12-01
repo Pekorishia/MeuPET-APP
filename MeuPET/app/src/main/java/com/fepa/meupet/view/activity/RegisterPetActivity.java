@@ -33,7 +33,7 @@ public class RegisterPetActivity extends AppCompatActivity {
             Pet pet = new Pet(petname);
 
             Intent intent = new Intent();
-            intent.putExtra(GeneralConfig.PET_BUNDLE, pet);
+            intent.putExtra(GeneralConfig.Pets.PET_BUNDLE, pet);
             setResult(GeneralConfig.RESULT_OK, intent);
             finish();
         }

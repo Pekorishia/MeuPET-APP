@@ -18,25 +18,28 @@ public final class GeneralConfig {
     // home
     public static final int START_BOTTOM_NAV_TAB = 1;
 
-    // Pet
-    public static final boolean MALE = false;
-    public static final boolean FEMALE = true;
-    public static final int START_PET_TAB = 0;
-    public static final int PET_ADD_REQUEST_CODE = 10;
-    public static final String PET_BUNDLE = "petBundle";
-
-    // Preference Mode
-    public static final int MODE = 0;
-    public static final String PREFERENCE_NAME = "WelcomeSlider";
-    public static final String IS_FIRST_LAUNCH = "IsFirstTimeLaunch";
-
-    // Maps
-    public static final int SEARCH_MAP_REQUEST_CODE = 10;
-    public static final String SEARCH_MAP_BUNDLE = "mapBundle";
-
     // List
     public static final int ITEM_SELECTED_COLOR = Color.rgb(226, 226, 226);
 
-    // Error
-    public static final String INVALID_INSTANCE_EXCEPTION = "Invalid Instance Excaption";
+    // Pets
+    public final class Pets {
+        public static final boolean MALE = false;
+        public static final boolean FEMALE = true;
+        public static final int START_PET_TAB = 0;
+        public static final int PET_ADD_REQUEST_CODE = 10;
+        public static final String PET_BUNDLE = "petBundle";
+    }
+
+    // Preference Mode
+    public final class Preferences {
+        public static final int MODE = 0;
+        public static final String PREFERENCE_NAME = "WelcomeSlider";
+        public static final String IS_FIRST_LAUNCH = "IsFirstTimeLaunch";
+    }
+
+    // Maps
+    public final class Maps {
+        public static final int SEARCH_MAP_REQUEST_CODE = 10;
+        public static final String SEARCH_MAP_BUNDLE = "mapBundle";
+    }
 }
