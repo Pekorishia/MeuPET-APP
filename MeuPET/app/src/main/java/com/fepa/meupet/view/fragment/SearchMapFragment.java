@@ -3,7 +3,7 @@ package com.fepa.meupet.view.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,9 +15,8 @@ import android.widget.Toast;
 
 import com.fepa.meupet.R;
 import com.fepa.meupet.control.dialog.SearchMapFilterDialog;
-import com.fepa.meupet.control.general.Geolocation;
+import com.fepa.meupet.model.agent.map.Geolocation;
 import com.fepa.meupet.model.environment.constants.GeneralConfig;
-import com.fepa.meupet.view.activity.RegisterPetActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -26,12 +25,16 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class SearchMapFragment extends android.support.v4.app.Fragment implements OnMapReadyCallback {
 
@@ -41,48 +44,9 @@ public class SearchMapFragment extends android.support.v4.app.Fragment implement
 
     private Map<String, List<Marker>> markersSet = new HashMap<>();
 
-    private Geolocation[] vetLocations =
-            {
-                    new Geolocation("Hospital Veterinário De Natal", -5.818388, -35.201147),
-                    new Geolocation("Animal Center Hospital e Pet Shop", -5.867451, -35.196872),
-                    new Geolocation("Harmony Vet",-5.857853, -35.202404)
-            };
-    private Geolocation[] restaurantsLocations =
-            {
-                    new Geolocation("Casanova Ecobar", -5.836671, -35.212228),
-                    new Geolocation("Curva do Vento", -5.881958, -35.177671),
-                    new Geolocation("Bocaditos",-5.877862, -35.178058)
-            };
 
-    private Geolocation[] beachesLocations =
-            {
-                    new Geolocation("Praia de Ponta Negra", -5.873671, -35.176585),
-                    new Geolocation("Praia do Meio", -5.778451, -35.193472),
-                    new Geolocation("Praia dos Artistas",-5.781828, -35.192804)
-            };
-
-    private Geolocation[] shoppingLocations =
-            {
-                    new Geolocation("Praia Shopping", -5.865860, -35.185632),
-                    new Geolocation("Natal Shopping", -5.841939, -35.211663),
-                    new Geolocation("Seaway Center",-5.859918, -35.194103)
-            };
-
-    private Geolocation[] hotelLocations =
-            {
-                    new Geolocation("Golden Tulip Natal Ponta Negra", -5.875551, -35.178614),
-                    new Geolocation("Comfort Hotel & Suites Natal", -5.879475, -35.176069),
-                    new Geolocation("Chalet Suisse Hotel", -5.882357, -35.173833)
-            };
-
-    private float[] colors =
-            {
-                    BitmapDescriptorFactory.HUE_CYAN,
-                    BitmapDescriptorFactory.HUE_ORANGE,
-                    BitmapDescriptorFactory.HUE_AZURE,
-                    BitmapDescriptorFactory.HUE_VIOLET,
-                    BitmapDescriptorFactory.HUE_MAGENTA
-            };
+    private FirebaseDatabase database;
+    private DatabaseReference reference;
 
 
     public SearchMapFragment() {
@@ -106,6 +70,8 @@ public class SearchMapFragment extends android.support.v4.app.Fragment implement
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.mapSearch);
         mapFragment.getMapAsync(this);
+
+       this.database = FirebaseDatabase.getInstance();
 
         return view;
     }
@@ -163,6 +129,7 @@ public class SearchMapFragment extends android.support.v4.app.Fragment implement
         this.map.getUiSettings().setMapToolbarEnabled(true);
         this.map.getUiSettings().setRotateGesturesEnabled(false);
 
+        // TODO: GET THE PERSON POSITION INSTEAD OF NATAL
         // Add a marker in Natal and move the camera there
         LatLng natal = new LatLng(-5.814940, -35.222929);
         this.map.moveCamera(CameraUpdateFactory.newLatLngZoom(natal, 10));
@@ -177,29 +144,50 @@ public class SearchMapFragment extends android.support.v4.app.Fragment implement
             this.markersSet.put(this.options[i], new ArrayList<Marker>());
         }
 
-        this.setMarkers(this.options[0], vetLocations, colors[0]);
-        this.setMarkers(this.options[1], restaurantsLocations, colors[1]);
-        this.setMarkers(this.options[2], beachesLocations, colors[2]);
-        this.setMarkers(this.options[3], shoppingLocations, colors[3]);
-        this.setMarkers(this.options[4], hotelLocations, colors[4]);
-
+        this.setMarkers(this.options[0], "vets");
+        this.setMarkers(this.options[1], "restaurants");
+        this.setMarkers(this.options[2], "beaches");
+        this.setMarkers(this.options[3], "shoppingMalls");
+        this.setMarkers(this.options[4], "hotels");
     }
 
-    private void setMarkers(String option, Geolocation[] markers, float color){
-        // for every option
-        for (int i = 0; i < markers.length; i++) {
-            // creates a new marker
-            MarkerOptions marker = new MarkerOptions();
+    /*
+     * Populates the Map with the markers and add markers at the map
+     */
+    private void setMarkers(final String option, String child){
+        this.reference = this.database.getReference("miauBD/searchMap").child(child);
 
-            marker.title(markers[i].getPlaceName())
-                    .position(new LatLng(markers[i].getLatitude(), markers[i].getLongitude()))
-                    .icon(BitmapDescriptorFactory.defaultMarker(color));
+        this.reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Geolocation geolocation;
+                MarkerOptions marker;
+
+                float color = Float.parseFloat(dataSnapshot.child("color").getValue().toString());
 
 
-            // shows it on the map and put the Marker created
-            // inside the markersSet
-            this.markersSet.get(option).add(this.map.addMarker(marker));
-        }
+                // for every location
+                for (DataSnapshot data: dataSnapshot.getChildren()){
+                    if (!data.getKey().equals("color")){
+                            geolocation = data.getValue(Geolocation.class);
+                            // creates a new marker
+                            marker = new MarkerOptions();
+
+                            marker.title(geolocation.getPlaceName())
+                                    .position(new LatLng(geolocation.getLatitude(), geolocation.getLongitude()))
+                                    .icon(BitmapDescriptorFactory.defaultMarker(color));
+
+
+                            // shows it on the map and put the Marker created
+                            // inside the markersSet
+                            markersSet.get(option).add(map.addMarker(marker));
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
     }
 
     private void showMarkers(String option){

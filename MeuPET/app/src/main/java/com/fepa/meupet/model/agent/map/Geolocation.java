@@ -1,4 +1,4 @@
-package com.fepa.meupet.control.general;
+package com.fepa.meupet.model.agent.map;
 
 import java.io.Serializable;
 
@@ -7,6 +7,8 @@ public class Geolocation implements Serializable {
     private String placeName;
     private double latitude;
     private double longitude;
+
+    public Geolocation(){}
 
     public Geolocation(String name, double latitude, double longitude) {
         this.placeName = name;
