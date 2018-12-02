@@ -18,10 +18,6 @@ public final class Login {
         if (!validatePassword(password)){
             return LoginResult.INVALID_PASSWORD;
         }
-
-        // TODO: Call a DAO to validade the login
-        // LoginResultConfig.LOGIN_FAILED
-
         return LoginResult.LOGIN_SUCCESS;
     }
 

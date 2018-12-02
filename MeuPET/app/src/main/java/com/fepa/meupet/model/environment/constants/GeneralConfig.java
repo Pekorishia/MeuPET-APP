@@ -8,12 +8,16 @@ public final class GeneralConfig {
     private GeneralConfig(){}
 
     public static final int RESULT_OK = 1;
+    public static final int REQUEST_CODE = 0;
 
     // splash
     public static final int SPLASH_TIME = 3500;
 
     // login
-    public static final int REQUEST_CODE = 0;
+    public static final String LOGIN_ERROR = "Erro ao logar";
+
+    // Register
+    public static final String REGISTER_ERROR = "Erro ao cadastrar";
 
     // home
     public static final int START_BOTTOM_NAV_TAB = 1;

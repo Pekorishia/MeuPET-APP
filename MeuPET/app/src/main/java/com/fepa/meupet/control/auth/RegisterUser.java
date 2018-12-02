@@ -23,9 +23,6 @@ public final class RegisterUser {
             return RegisterResult.PASSWORD_MISMATCH;
         }
 
-        // TODO: Call a DAO to register
-        // RegisterUserResultConfig.REGISTER_FAILED
-
         return RegisterResult.REGISTER_SUCCESS;
     }
 
@@ -39,7 +36,7 @@ public final class RegisterUser {
 
     private static boolean validatePassword(String password){
         if (password == null) {return false;}
-        if (password.length() < 4) {return false;}
+        if (password.length() < 6) {return false;}
 
         return true;
     }

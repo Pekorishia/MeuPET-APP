@@ -1,6 +1,7 @@
 package com.fepa.meupet.view.activity;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,22 +14,34 @@ import com.fepa.meupet.R;
 import com.fepa.meupet.control.auth.Login;
 import com.fepa.meupet.model.environment.constants.GeneralConfig;
 import com.fepa.meupet.model.environment.enums.LoginResult;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText etEmail;
     private EditText etPassword;
-
+    private EditText etEmail;
     private Button btLogin;
+
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        this.etEmail = this.findViewById(R.id.etEmail);
-        this.etPassword = this.findViewById(R.id.etPassword);
+        this.auth = FirebaseAuth.getInstance();
 
+        // if there is someone logged in
+        if (this.auth.getCurrentUser() != null){
+            // goes to the home screen
+            startActivity(new Intent(this, HomeActivity.class));
+        }
+
+        this.etPassword = this.findViewById(R.id.etPassword);
+        this.etEmail = this.findViewById(R.id.etEmail);
         this.btLogin = this.findViewById(R.id.btLogin);
     }
 
@@ -47,14 +60,13 @@ public class LoginActivity extends AppCompatActivity {
      * @param view
      */
     public void onLoginClick(View view) {
+        String email = this.etEmail.getText().toString().trim();
+        String passwd = this.etPassword.getText().toString();
 
         this.btLogin.setEnabled(false);
 
         // gets the response value from login
-        LoginResult response = Login.login(
-                this.etEmail.getText().toString(),
-                this.etPassword.getText().toString()
-        );
+        LoginResult response = Login.login(email, passwd);
 
         // Deals with email error
         if (response == LoginResult.INVALID_EMAIL){
@@ -81,7 +93,18 @@ public class LoginActivity extends AppCompatActivity {
 
         // if the login was successful
         if (response == LoginResult.LOGIN_SUCCESS){
-            this.onLoginSuccess();
+
+            this.auth.signInWithEmailAndPassword(email, passwd).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()){
+                        onLoginSuccess();
+                    }
+                    else {
+                        Toast.makeText(LoginActivity.this, GeneralConfig.LOGIN_ERROR, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
     }
 

@@ -1,5 +1,6 @@
 package com.fepa.meupet.view.activity;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +11,10 @@ import android.widget.Toast;
 import com.fepa.meupet.R;
 import com.fepa.meupet.control.auth.RegisterUser;
 import com.fepa.meupet.model.environment.enums.RegisterResult;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class RegisterUserActivity extends AppCompatActivity {
 
@@ -18,6 +23,8 @@ public class RegisterUserActivity extends AppCompatActivity {
     private EditText etConfirmPwd;
 
     private Button btRegister;
+
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +37,8 @@ public class RegisterUserActivity extends AppCompatActivity {
         this.etConfirmPwd = this.findViewById(R.id.etConfirmRegisterPwd);
 
         this.btRegister = this.findViewById(R.id.btRegisterUser);
+
+        this.auth = FirebaseAuth.getInstance();
     }
 
     /**
@@ -40,12 +49,12 @@ public class RegisterUserActivity extends AppCompatActivity {
     public void onRegisterClick(View view) {
         this.btRegister.setEnabled(false);
 
+        String email = this.etEmail.getText().toString().trim();
+        String cPasswd = this.etConfirmPwd.getText().toString();
+        String passwd = this.etPassword.getText().toString();
+
         // gets the response value from register
-        RegisterResult response = RegisterUser.register(
-                this.etEmail.getText().toString(),
-                this.etPassword.getText().toString(),
-                this.etConfirmPwd.getText().toString()
-        );
+        RegisterResult response = RegisterUser.register(email,passwd,cPasswd);
 
         // Deals with email error
         if (response == RegisterResult.INVALID_EMAIL){
@@ -82,7 +91,16 @@ public class RegisterUserActivity extends AppCompatActivity {
 
         // if the registration was successful
         if (response == RegisterResult.REGISTER_SUCCESS){
-           this.onRegisterSuccess();
+            this.auth.createUserWithEmailAndPassword(email, passwd).addOnCompleteListener(this,
+                new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            onRegisterSuccess();
+                        }
+                    }
+                }
+            );
         }
     }
 
