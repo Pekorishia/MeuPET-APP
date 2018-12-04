@@ -55,12 +55,12 @@
             android:name=".view.activity.HomeActivity"
             android:theme="@style/MyTheme.TranslucentNavigation">
 
-             <!--<intent-filter>-->
+             <!--<intent-filter_icon>-->
              <!--<action android:name="android.intent.action.MAIN" />-->
 
 
              <!--<category android:name="android.intent.category.LAUNCHER" />-->
-             <!--</intent-filter>-->
+             <!--</intent-filter_icon>-->
         </activity>
         <activity android:name=".view.activity.RegisterPetActivity" />
         <!--

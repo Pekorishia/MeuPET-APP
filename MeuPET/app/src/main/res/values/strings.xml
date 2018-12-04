@@ -86,6 +86,10 @@
     <string name="pet_image_button_text">Foto</string>
 
 
+    <!--Settings-->
+    <string name="user_settings">Perfil</string>
+    <string name="logout_settings">Sair</string>
+
     <!--TESTS-->
     <string-array name="animal_names">
         <item>Memphis</item>

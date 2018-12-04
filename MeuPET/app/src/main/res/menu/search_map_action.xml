@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/actSMapFilter"
-        android:icon="@drawable/filter"
+        android:icon="@drawable/filter_icon"
         android:title="@string/smap_filter_title"
         app:showAsAction="always" />
 </menu>

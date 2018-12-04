@@ -16,7 +16,6 @@ import com.fepa.meupet.model.environment.constants.GeneralConfig;
 import com.fepa.meupet.model.environment.enums.SwipeDirection;
 import com.fepa.meupet.view.fragment.CalendarFragment;
 import com.fepa.meupet.view.fragment.LostPetsFragment;
-import com.fepa.meupet.view.fragment.PetFragment;
 import com.fepa.meupet.view.fragment.PetListFragment;
 import com.fepa.meupet.view.fragment.SearchMapFragment;
 import com.fepa.meupet.view.fragment.SettingsFragment;
