@@ -25,6 +25,12 @@ public final class GeneralConfig {
     // List
     public static final int ITEM_SELECTED_COLOR = Color.rgb(226, 226, 226);
 
+    // notification
+    public final class Notifications {
+        public static final String BROADCAST_NOTIFICATION = "br.ufrn.android.broadcast.NOTIFICATION";
+        public static final String NOTIFICATION_BUNDLE = "notificationBundle";
+    }
+
     // Pets
     public final class Pets {
         public static final boolean MALE = false;

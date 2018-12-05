@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -20,9 +21,10 @@ import com.fepa.meupet.R;
 import com.fepa.meupet.control.adapter.PetItemAdapter;
 import com.fepa.meupet.model.agent.pet.Pet;
 import com.fepa.meupet.model.environment.constants.GeneralConfig;
+import com.fepa.meupet.view.activity.PetActivity;
 import com.fepa.meupet.view.activity.RegisterPetActivity;
 
-public class PetListFragment extends ListFragment implements ActionMode.Callback {
+public class PetListFragment extends ListFragment implements ActionMode.Callback, AdapterView.OnItemLongClickListener {
 
     private PetItemAdapter adapter;
     private ActionMode actionMode;
@@ -51,6 +53,8 @@ public class PetListFragment extends ListFragment implements ActionMode.Callback
 
         this.adapter = new PetItemAdapter(getContext());
         this.listView.setAdapter(adapter);
+
+        this.listView.setOnItemLongClickListener(this);
 
         return view;
     }
@@ -149,11 +153,20 @@ public class PetListFragment extends ListFragment implements ActionMode.Callback
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
+        Intent intent = new Intent(getContext(), PetActivity.class);
+        Pet pet = (Pet) this.adapter.getItem(position);
+        intent.putExtra(GeneralConfig.Pets.PET_BUNDLE, pet);
+        startActivity(intent);
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+
         // if no item was selected
         if (this.itemSelected < 0){
 
             // selects item
-            this.itemSelected = position;
+            this.itemSelected = i;
 
             // updates item color
             this.setItemColor(this.itemSelected, GeneralConfig.ITEM_SELECTED_COLOR);
@@ -161,7 +174,7 @@ public class PetListFragment extends ListFragment implements ActionMode.Callback
             // starts the action mode
             getActivity().startActionMode(this);
 
-        } else if (this.itemSelected == position){
+        } else if (this.itemSelected == i){
 
             // updates item color
             this.setItemColor(this.itemSelected, Color.TRANSPARENT);
@@ -170,6 +183,7 @@ public class PetListFragment extends ListFragment implements ActionMode.Callback
             this.itemSelected = -1;
             this.actionMode.finish();
         }
+        return true;
     }
 
     private void setItemColor(int position, int color){

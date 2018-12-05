@@ -34,13 +34,11 @@
         <activity
             android:name=".view.activity.SplashActivity"
             android:theme="@style/MyTheme.FullScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-             <intent-filter>
-             <action android:name="android.intent.action.MAIN" />
-
-
-             <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".view.activity.SliderIntroActivity"
@@ -55,12 +53,12 @@
             android:name=".view.activity.HomeActivity"
             android:theme="@style/MyTheme.TranslucentNavigation">
 
-             <!--<intent-filter_icon>-->
-             <!--<action android:name="android.intent.action.MAIN" />-->
+            <!-- <intent-filter_icon> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
 
 
-             <!--<category android:name="android.intent.category.LAUNCHER" />-->
-             <!--</intent-filter_icon>-->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter_icon> -->
         </activity>
         <activity android:name=".view.activity.RegisterPetActivity" />
         <!--
@@ -75,6 +73,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB331jtHuAXVEPyNIyIbZE3U6r_8A05eCk" />
 
+        <activity android:name=".view.activity.PetActivity"></activity>
     </application>
 
 </manifest>

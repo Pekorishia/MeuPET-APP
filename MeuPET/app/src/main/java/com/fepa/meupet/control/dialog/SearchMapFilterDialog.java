@@ -28,7 +28,7 @@ public class SearchMapFilterDialog extends DialogFragment implements DialogInter
         return new AlertDialog.Builder(getActivity())
                 .setTitle(getString(R.string.smap_dialog_title))
                 .setMultiChoiceItems(R.array.smap_dialog_options, this.checkList,this)
-                .setPositiveButton(R.string.smap_dialog_positive, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.dialog_positive, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent intent = new Intent();
@@ -37,7 +37,7 @@ public class SearchMapFilterDialog extends DialogFragment implements DialogInter
                         getTargetFragment().onActivityResult(getTargetRequestCode(), GeneralConfig.RESULT_OK, intent);
                     }
                 })
-                .setNegativeButton(R.string.smap_dialog_negative, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.dialog_negative, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dismiss();
@@ -52,7 +52,6 @@ public class SearchMapFilterDialog extends DialogFragment implements DialogInter
     }
 
     private void setupCheckList(String[] options){
-
         // setups to all values start as false
         this.checkList = new boolean[options.length];
     }

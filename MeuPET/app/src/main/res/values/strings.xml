@@ -5,6 +5,9 @@
     <string name="email_error">Escreva um e-mail válido</string>
     <string name="pwd_error">No mínimo 4 caracteres</string>
 
+    <string name="dialog_positive">Salvar</string>
+    <string name="dialog_negative">Cancelar</string>
+
     <!--Hints-->
     <string name="password_confirm_hint_text">Confirme a Senha</string>
     <string name="password_hint_text">Senha</string>
@@ -70,9 +73,6 @@
         <item>Shoppings</item>
         <item>Hotéis</item>
     </array>
-    <string name="smap_dialog_positive">Salvar</string>
-    <string name="smap_dialog_negative">Cancelar</string>
-
 
     <!--Register Pet-->
     <string name="pet_register_bt_text">Salvar</string>
@@ -85,6 +85,14 @@
     <!--Pet Register-->
     <string name="pet_image_button_text">Foto</string>
 
+    <!--Pet-->
+    <string name="pet_notification">Notificações</string>
+
+    <!--Notification-->
+    <string name="dialog_notification_name">Nome</string>
+    <string name="dialog_notification_date">Data</string>
+    <string name="dialog_notification_time">Hora</string>
+    <string name="notification_dialog_title">Criar uma notificação</string>
 
     <!--Settings-->
     <string name="user_settings">Perfil</string>
