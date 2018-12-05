@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context=".view.fragment.CalendarFragment">
-
-<ListView
-    android:id="@android:id/list"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/bottom_navigation_height"
-    android:paddingTop="@dimen/top_padding"
-    android:layout_marginLeft="@dimen/activity_margin_half"
-    android:layout_marginRight="@dimen/activity_margin_half"
-    android:layout_marginBottom="?android:attr/actionBarSize"
-    android:dividerHeight="1dp"
+    tools:context=".view.fragment.CalendarFragment">
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/bottom_navigation_height"
+        android:paddingTop="@dimen/top_padding"
+        android:layout_marginLeft="@dimen/activity_margin_half"
+        android:layout_marginRight="@dimen/activity_margin_half"
+        android:layout_marginBottom="?android:attr/actionBarSize"
+        android:layout_marginTop="70dp"
+        android:dividerHeight="1dp"
     />
 
 </FrameLayout>

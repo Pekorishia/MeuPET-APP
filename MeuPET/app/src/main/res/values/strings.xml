@@ -98,20 +98,6 @@
     <string name="user_settings">Perfil</string>
     <string name="logout_settings">Sair</string>
 
-    <!--TESTS-->
-    <string-array name="animal_names">
-        <item>Memphis</item>
-        <item>Oakley</item>
-        <item>Shelby</item>
-        <item>Shiloh</item>
-        <item>Meeko</item>
-        <item>Tinkerbelle</item>
-        <item>Nukka</item>
-        <item>Yeti</item>
-        <item>Kiro</item>
-        <item>Simba</item>
-    </string-array>
-
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_maps">Map</string>

@@ -25,19 +25,6 @@ public class PetItemAdapter extends BaseAdapter {
     public PetItemAdapter(Context context){
         this.context = context;
         this.petList = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);;
-
-        this.populateList();
-    }
-
-    private void populateList(){
-        String[] nameArray = this.context.getResources().getStringArray(R.array.animal_names);
-
-        final int SIZE = nameArray.length;
-
-        for (int i = 0; i < SIZE; i++) {
-            Pet pet = new Pet(nameArray[i]);
-            this.petList.add(pet);
-        }
     }
 
     public void addItem(Pet pet) {

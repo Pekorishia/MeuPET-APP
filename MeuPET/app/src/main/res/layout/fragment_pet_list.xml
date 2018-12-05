@@ -13,6 +13,7 @@
         android:paddingTop="@dimen/top_padding"
         android:layout_marginLeft="@dimen/activity_margin_half"
         android:layout_marginRight="@dimen/activity_margin_half"
+        android:layout_marginTop="70dp"
         android:layout_marginBottom="?android:attr/actionBarSize"
         android:dividerHeight="1dp"
         />
