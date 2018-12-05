@@ -2,6 +2,8 @@ package com.fepa.meupet.model.environment.constants;
 
 import android.graphics.Color;
 
+import com.fepa.meupet.model.environment.enums.BottomTabs;
+
 public final class GeneralConfig {
 
     // disable instantiation
@@ -20,7 +22,8 @@ public final class GeneralConfig {
     public static final String REGISTER_ERROR = "Erro ao cadastrar";
 
     // home
-    public static final int START_BOTTOM_NAV_TAB = 1;
+    public static final int START_BOTTOM_NAV_TAB = BottomTabs.PETS.getValue();
+    public static final int BOTTOM_NAV_SIZE = 5;
 
     // List
     public static final int ITEM_SELECTED_COLOR = Color.rgb(226, 226, 226);

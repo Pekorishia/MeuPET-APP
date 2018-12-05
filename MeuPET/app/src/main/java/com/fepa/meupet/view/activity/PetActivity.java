@@ -4,8 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -35,6 +37,10 @@ public class PetActivity extends AppCompatActivity implements AdapterView.OnItem
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pet);
 
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         Intent it = getIntent();
 
         pet = (Pet) it.getSerializableExtra(GeneralConfig.Pets.PET_BUNDLE);
@@ -46,6 +52,8 @@ public class PetActivity extends AppCompatActivity implements AdapterView.OnItem
         if (pet != null){
             tvPetName.setText(pet.getName());
             ivPet.setImageResource(R.mipmap.ic_launcher_round);
+
+            actionBar.setTitle(pet.getName());
         }
 
         this.setupListView();
@@ -101,4 +109,11 @@ public class PetActivity extends AppCompatActivity implements AdapterView.OnItem
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+        return true;
+    }
+
 }
