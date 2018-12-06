@@ -21,6 +21,8 @@ public class Pet implements Serializable {
     //    private Notification notification;
     //    private List<Module> modules;
 
+    public Pet(){}
+
     public Pet(String name) {
         this.name = name;
     }

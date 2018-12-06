@@ -3,6 +3,7 @@ package com.fepa.meupet.view.fragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -23,6 +24,12 @@ import com.fepa.meupet.model.agent.pet.Pet;
 import com.fepa.meupet.model.environment.constants.GeneralConfig;
 import com.fepa.meupet.view.activity.PetActivity;
 import com.fepa.meupet.view.activity.RegisterPetActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class PetListFragment extends ListFragment implements ActionMode.Callback, AdapterView.OnItemLongClickListener {
 
@@ -31,6 +38,11 @@ public class PetListFragment extends ListFragment implements ActionMode.Callback
     private ListView listView;
 
     private int itemSelected = -1;
+
+    private FirebaseAuth auth;
+    private FirebaseDatabase database;
+    private DatabaseReference reference;
+    private ChildEventListener childEventListener;
 
     public PetListFragment() {
         // Required empty public constructor
@@ -56,7 +68,54 @@ public class PetListFragment extends ListFragment implements ActionMode.Callback
 
         this.listView.setOnItemLongClickListener(this);
 
+        this.database = FirebaseDatabase.getInstance();
+        this.auth = FirebaseAuth.getInstance();
+
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        this.adapter.clearAdapter();
+        this.populateListFromDB();
+    }
+
+    private void populateListFromDB(){
+        String email = this.auth.getCurrentUser().getEmail().replace(".", "");
+
+        String key = this.database.getReference("miauBD/person")
+                .child(email)
+                .getKey();
+
+        this.reference = this.database
+                .getReference("miauBD/person/"+key);
+
+        this.childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                String chave = dataSnapshot.getKey();
+                Pet pet = dataSnapshot.getValue(Pet.class);
+
+                adapter.addItem(pet);
+                adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {}
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        };
+
+        this.reference.addChildEventListener(this.childEventListener);
     }
 
     @Override
@@ -204,5 +263,23 @@ public class PetListFragment extends ListFragment implements ActionMode.Callback
             return -1;
         }
         return relativePosition;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        if (this.childEventListener != null){
+            this.reference.removeEventListener(this.childEventListener);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (this.childEventListener != null){
+            this.reference.removeEventListener(this.childEventListener);
+        }
     }
 }

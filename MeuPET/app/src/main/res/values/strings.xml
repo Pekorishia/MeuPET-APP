@@ -41,7 +41,7 @@
     <string name="register_bt_text">Criar Conta</string>
 
     <string name="password_mismatch_error">As senhas não batem</string>
-    <string name="register_error">Erro ao Registrar</string>
+    <string name="register_error">Erro ao Cadastrar</string>
 
 
     <!--Bottom Navigation-->
@@ -76,6 +76,7 @@
 
     <!--Register Pet-->
     <string name="pet_register_bt_text">Salvar</string>
+    <string name="pet_register_error">Erro ao Cadastrar</string>
 
     <!--Pet Edit Menu-->
     <string name="pet_edit_title">Editar Pet</string>

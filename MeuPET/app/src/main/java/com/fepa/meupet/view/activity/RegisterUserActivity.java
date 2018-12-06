@@ -10,18 +10,23 @@ import android.widget.Toast;
 
 import com.fepa.meupet.R;
 import com.fepa.meupet.control.auth.RegisterUser;
+import com.fepa.meupet.model.agent.person.Person;
+import com.fepa.meupet.model.agent.pet.Pet;
 import com.fepa.meupet.model.environment.enums.RegisterResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 
 public class RegisterUserActivity extends AppCompatActivity {
 
     private EditText etEmail;
     private EditText etPassword;
     private EditText etConfirmPwd;
-
     private Button btRegister;
 
     private FirebaseAuth auth;
@@ -95,9 +100,10 @@ public class RegisterUserActivity extends AppCompatActivity {
                 new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
+                        if(task.isSuccessful())
                             onRegisterSuccess();
-                        }
+                         else
+                            onRegisterFailed();
                     }
                 }
             );

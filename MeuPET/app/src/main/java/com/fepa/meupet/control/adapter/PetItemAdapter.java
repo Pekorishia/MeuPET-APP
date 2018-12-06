@@ -40,6 +40,10 @@ public class PetItemAdapter extends BaseAdapter {
         this.petList.remove(this.petList.getItem(position));
     }
 
+    public void clearAdapter(){
+        this.petList.clear();
+    }
+
     @Override
     public int getCount() {
         return (this.petList != null ? this.petList.getCount() : 0);
