@@ -75,7 +75,10 @@
     </array>
 
     <!--Register Pet-->
+    <string name="pet_register_title">Cadastrar Pet</string>
+    <string name="pet_register_add_photo">Clique para Adicionar uma Foto</string>
     <string name="pet_register_bt_text">Salvar</string>
+    <string name="pet_register_breed_text">Raça</string>
     <string name="pet_register_error">Erro ao Cadastrar</string>
 
     <!--Pet Edit Menu-->

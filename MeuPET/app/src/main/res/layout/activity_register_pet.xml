@@ -13,18 +13,37 @@
         android:paddingLeft="24dp"
         android:paddingRight="24dp">
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btPetImage"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+        <!--<android.support.v7.widget.AppCompatButton-->
+            <!--android:id="@+id/btPetImage"-->
+            <!--android:layout_width="100dp"-->
+            <!--android:layout_height="100dp"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:layout_marginBottom="10dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:paddingTop="30dp"-->
+            <!--android:onClick="onImageButtonClick"-->
+            <!--android:background="@drawable/circle"-->
+            <!--android:drawableTop="@drawable/camera_icon"-->
+            <!--android:text="@string/pet_image_button_text"/>-->
+
+        <ImageView
+            android:id="@+id/ivPetPhoto"
+            android:layout_width="400px"
+            android:layout_height="460px"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="5dp"
             android:layout_gravity="center"
             android:paddingTop="30dp"
-            android:onClick="onImageButtonClick"
-            android:background="@drawable/circle"
-            android:drawableTop="@drawable/camera_icon"
-            android:text="@string/pet_image_button_text"/>
+            android:scaleType="centerCrop"
+            android:onClick="onPetPhotoClick"/>
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginBottom="10dp"
+            android:text="@string/pet_register_add_photo" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"

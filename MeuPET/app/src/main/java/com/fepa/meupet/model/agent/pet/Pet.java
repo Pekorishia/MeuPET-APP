@@ -14,8 +14,8 @@ public class Pet implements Serializable {
 
     private String name;
     private String breed;
+    private String photoPath;
     private Date birthday;
-    private ImageView photo;
 
     //    private Veterinarian vet;
     //    private Notification notification;
@@ -83,11 +83,11 @@ public class Pet implements Serializable {
         this.birthday = birthday;
     }
 
-    public ImageView getPhoto() {
-        return photo;
+    public String getPhotoPath() {
+        return photoPath;
     }
 
-    public void setPhoto(ImageView photo) {
-        this.photo = photo;
+    public void setPhotoPath(String photoPath) {
+        this.photoPath = photoPath;
     }
 }

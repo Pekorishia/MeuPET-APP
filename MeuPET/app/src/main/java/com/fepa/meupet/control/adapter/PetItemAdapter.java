@@ -1,6 +1,8 @@
 package com.fepa.meupet.control.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -75,7 +77,11 @@ public class PetItemAdapter extends BaseAdapter {
 
         // fills data
         ViewHolder holder = (ViewHolder) view.getTag();
-        holder.image.setImageResource(R.mipmap.ic_launcher_round);
+        if (pet.getPhotoPath() == null || pet.getPhotoPath().equals(""))
+            holder.image.setImageResource(R.mipmap.ic_launcher_round);
+        else
+            holder.image.setImageBitmap(BitmapFactory.decodeFile(pet.getPhotoPath()));
+
         holder.text.setText(pet.getName());
 
         return view;

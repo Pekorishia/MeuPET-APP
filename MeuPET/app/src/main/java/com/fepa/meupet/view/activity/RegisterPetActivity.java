@@ -1,11 +1,19 @@
 package com.fepa.meupet.view.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.fepa.meupet.R;
@@ -14,15 +22,16 @@ import com.fepa.meupet.model.environment.constants.GeneralConfig;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 public class RegisterPetActivity extends AppCompatActivity {
 
+    private String imagePath;
+
     private EditText edName;
+    private ImageView ivPetPhoto;
+
     private FirebaseAuth auth;
     private FirebaseDatabase database;
 
@@ -31,20 +40,62 @@ public class RegisterPetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_pet);
 
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
+            }
+        }
+
         this.edName = this.findViewById(R.id.etPetName);
+        this.ivPetPhoto = this.findViewById(R.id.ivPetPhoto);
+        this.ivPetPhoto.setImageResource(R.drawable.add_photo);
+
         this.database = FirebaseDatabase.getInstance();
         this.auth = FirebaseAuth.getInstance();
     }
 
-    public void onImageButtonClick(View view) {
-        this.openImagePicker();
+    public void onPetPhotoClick(View view) {
+        Intent it = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(Intent.createChooser(it, "Abrir com"), 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 1 && resultCode == RESULT_OK){
+            Uri imageURI = data.getData();
+
+            if(imageURI != null){
+                Cursor cursor = null;
+
+                try {
+                    String[] proj = { MediaStore.Images.Media.DATA };
+                    cursor = getApplicationContext().getContentResolver().query(imageURI, proj, null, null, null);
+
+                    int index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                    cursor.moveToFirst();
+                    imagePath = cursor.getString(index);
+
+                    this.ivPetPhoto.setImageURI(imageURI);
+
+                } finally {
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                }
+            }
+        }
     }
 
     public void onRegisterClick(View view) {
-        String petname = this.edName.getText().toString();
+        String petName = this.edName.getText().toString();
 
-        if (petname != "" && petname != null){
-            Pet pet = new Pet(petname);
+        if (petName != "" && petName != null){
+            Pet pet = new Pet(petName);
+            pet.setPhotoPath(this.imagePath);
 
             this.savePet(pet);
         }
@@ -71,16 +122,11 @@ public class RegisterPetActivity extends AppCompatActivity {
         });
     }
 
-
     private void sendIntentResult(Pet pet){
         Intent intent = new Intent();
         intent.putExtra(GeneralConfig.Pets.PET_BUNDLE, pet);
         setResult(GeneralConfig.RESULT_OK, intent);
         finish();
-    }
-
-    private void openImagePicker(){
-        // TODO
     }
 
 }
