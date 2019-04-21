@@ -84,12 +84,12 @@ public class PetListFragment extends ListFragment implements ActionMode.Callback
     private void populateListFromDB(){
         String email = this.auth.getCurrentUser().getEmail().replace(".", "");
 
-        String key = this.database.getReference("miauBD/person")
+        String key = this.database.getReference(GeneralConfig.DB_PATH_PERSON)
                 .child(email)
                 .getKey();
 
         this.reference = this.database
-                .getReference("miauBD/person/"+key);
+                .getReference(GeneralConfig.DB_PATH_PERSON+key);
 
         this.childEventListener = new ChildEventListener() {
             @Override
@@ -99,7 +99,6 @@ public class PetListFragment extends ListFragment implements ActionMode.Callback
 
                 adapter.addItem(pet);
                 adapter.notifyDataSetChanged();
-
             }
 
             @Override

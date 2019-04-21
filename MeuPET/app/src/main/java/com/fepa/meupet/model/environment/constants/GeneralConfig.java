@@ -18,6 +18,10 @@ public final class GeneralConfig {
     // login
     public static final String LOGIN_ERROR = "Erro ao logar";
 
+    // Firebase database
+    public static final String DB_PATH_PERSON = "miauBD/person/";
+    public static final String DB_PATH_MAP = "miauBD/searchMap/";
+
     // Register
     public static final String REGISTER_ERROR = "Erro ao cadastrar";
 

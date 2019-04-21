@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,8 +24,20 @@ import com.fepa.meupet.control.dialog.EditPetInfoDialog;
 import com.fepa.meupet.model.agent.pet.Pet;
 import com.fepa.meupet.model.environment.constants.GeneralConfig;
 import com.fepa.meupet.model.environment.notification.Notification;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.EditPetInfoDialogListener, AdapterView.OnItemClickListener {
 
@@ -39,6 +52,9 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
     private TextView tvPetHeight;
     private TextView tvPetWeight;
 
+    private FirebaseAuth auth;
+    private FirebaseDatabase database;
+    private DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +69,9 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
         this.tvPetBreed = this.findViewById(R.id.tvPetBreed);
         this.tvPetHeight = this.findViewById(R.id.tvPetHeight);
         this.tvPetWeight = this.findViewById(R.id.tvPetWeight);
+
+        this.database = FirebaseDatabase.getInstance();
+        this.auth = FirebaseAuth.getInstance();
 
         ImageView ivPet = this.findViewById(R.id.ivPet);
         TextView tvPetName = this.findViewById(R.id.tvPetName);
@@ -155,8 +174,55 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
     @Override
     public void onFinishEditPetDialog(Pet _pet) {
         this.pet = _pet;
+        this.updatePetDB();
         this.updatePetInfo();
     }
+
+
+    private void updatePetDB(){
+        String email = this.auth.getCurrentUser().getEmail().replace(".", "");
+
+        String key = this.database.getReference(GeneralConfig.DB_PATH_PERSON)
+                .child(email)
+                .getKey();
+
+        this.reference = this.database
+                .getReference(GeneralConfig.DB_PATH_PERSON+key);
+
+        this.reference.orderByChild("name")
+                .equalTo(this.pet.getName())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot child: dataSnapshot.getChildren())
+                        {
+                            String key = child.getKey().toString();
+                            Map<String, Object> update = new HashMap<>();
+                            update.put(key, pet);
+                            reference.updateChildren(update);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+//        Map<String, Object> update = new HashMap<>();
+//        update.put(chave, pet);
+//
+//        this.reference.updateChildren(update).addOnCompleteListener(new OnCompleteListener<Void>() {
+//            @Override
+//            public void onComplete(@NonNull Task<Void> task) {
+//                if (task.isSuccessful())
+//                    Toast.makeText(PetActivity.this, "Dados Atualizados com Sucesso", Toast.LENGTH_SHORT).show();
+//                else
+//                    Toast.makeText(PetActivity.this, "Erro ao atualizar", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+    }
+
 
     private void updatePetInfo(){
         this.tvPetAge.setText(this.pet.getAge() + " " + getString(R.string.pet_info_age));

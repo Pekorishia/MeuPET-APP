@@ -5,7 +5,7 @@ import android.widget.ImageView;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Pet implements Serializable {
+public class Pet extends Object implements Serializable {
 
     private String age;      // year
     private String height;   // cm

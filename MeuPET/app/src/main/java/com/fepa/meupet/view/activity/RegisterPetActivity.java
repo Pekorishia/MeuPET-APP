@@ -104,12 +104,12 @@ public class RegisterPetActivity extends AppCompatActivity {
     private void savePet(final Pet pet){
         String email = this.auth.getCurrentUser().getEmail().replace(".", "");
 
-        String key = this.database.getReference("miauBD/person")
+        String key = this.database.getReference(GeneralConfig.DB_PATH_PERSON)
                 .child(email)
                 .getKey();
 
         DatabaseReference reference = this.database
-                .getReference("miauBD/person/"+key);
+                .getReference(GeneralConfig.DB_PATH_PERSON+key);
         
         reference.push().setValue(pet).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

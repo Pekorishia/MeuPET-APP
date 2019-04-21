@@ -162,7 +162,7 @@ public class SearchMapFragment extends android.support.v4.app.Fragment implement
      * Populates the Map with the markers and add markers at the map
      */
     private void setMarkers(final String option, String child){
-        this.reference = this.database.getReference("miauBD/searchMap").child(child);
+        this.reference = this.database.getReference(GeneralConfig.DB_PATH_MAP).child(child);
 
         this.reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
