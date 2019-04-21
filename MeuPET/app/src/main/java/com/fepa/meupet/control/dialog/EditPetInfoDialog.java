@@ -116,7 +116,7 @@ public class EditPetInfoDialog extends DialogFragment {
         if (this.pet.getBreed()!= null && !this.pet.getBreed().equals(""))
             this.etEditBreed.setText(this.pet.getBreed());
 
-        if (this.pet.getSex().equals(getString(R.string.dialog_pet_female)))
+        if (this.pet.getSex().equals(GeneralConfig.Pets.FEMALE))
             this.rbEditFemale.setChecked(true);
         else
             this.rbEditMale.setChecked(true);

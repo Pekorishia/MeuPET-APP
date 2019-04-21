@@ -41,6 +41,7 @@ public class SearchMapFragment extends android.support.v4.app.Fragment implement
     private GoogleMap map;
 
     private String[] options;
+    private boolean[] checkList;
 
     private Map<String, List<Marker>> markersSet = new HashMap<>();
 
@@ -87,6 +88,9 @@ public class SearchMapFragment extends android.support.v4.app.Fragment implement
         switch (item.getItemId()){
             case R.id.actSMapFilter :
                 SearchMapFilterDialog multiple = new SearchMapFilterDialog();
+                Bundle data = new Bundle();
+                data.putBooleanArray("checklist", checkList);
+                multiple.setArguments(data);
                 multiple.setTargetFragment(this, GeneralConfig.Maps.SEARCH_MAP_REQUEST_CODE);
                 multiple.show(getActivity().getSupportFragmentManager(),"dialogMultiple");
                 return true;
@@ -102,11 +106,11 @@ public class SearchMapFragment extends android.support.v4.app.Fragment implement
         if(requestCode ==  GeneralConfig.Maps.SEARCH_MAP_REQUEST_CODE
                 && resultCode == GeneralConfig.RESULT_OK){
 
-            // gets the boolean vector that marks each checked option
-            boolean[] result = data.getBooleanArrayExtra(GeneralConfig.Maps.SEARCH_MAP_BUNDLE);
+            // gets the boolean array that marks each checked option
+            this.checkList = data.getBooleanArrayExtra(GeneralConfig.Maps.SEARCH_MAP_BUNDLE);
 
-            for (int i = 0; i < result.length; i++) {
-                if (result[i])
+            for (int i = 0; i < this.checkList.length; i++) {
+                if (this.checkList[i])
                     this.showMarkers(this.options[i]);
                 else
                     this.removeMarkers(this.options[i]);
@@ -139,9 +143,12 @@ public class SearchMapFragment extends android.support.v4.app.Fragment implement
     private void setupMarkersSet(){
         this.options = getActivity().getResources().getStringArray(R.array.smap_dialog_options);
 
-        // initiates the map
+        this.checkList = new boolean[this.options.length];
+
+        // initiates the map and the boolean array
         for (int i = 0; i < this.options.length; i++) {
             this.markersSet.put(this.options[i], new ArrayList<Marker>());
+            this.checkList[i] = true;
         }
 
         this.setMarkers(this.options[0], "vets");

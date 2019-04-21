@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.widget.Toast;
 
 import com.fepa.meupet.R;
 import com.fepa.meupet.model.environment.constants.GeneralConfig;
@@ -23,7 +24,7 @@ public class SearchMapFilterDialog extends DialogFragment implements DialogInter
 
         final String[] options = getActivity().getResources().getStringArray(R.array.smap_dialog_options);
 
-        this.setupCheckList(options);
+        this.checkList = getArguments().getBooleanArray("checklist");
 
         return new AlertDialog.Builder(getActivity())
                 .setTitle(getString(R.string.smap_dialog_title))
@@ -50,10 +51,4 @@ public class SearchMapFilterDialog extends DialogFragment implements DialogInter
     public void onClick(DialogInterface dialogInterface, int i, boolean isChecked) {
         this.checkList[i] = isChecked;
     }
-
-    private void setupCheckList(String[] options){
-        // setups to all values start as false
-        this.checkList = new boolean[options.length];
-    }
-
 }
