@@ -7,11 +7,11 @@ import java.util.Date;
 
 public class Pet implements Serializable {
 
-    private float age;      // year
-    private int height;     // cm
-    private boolean sex;    // M - false F - true
-    private float weight;   // kg
+    private String age;      // year
+    private String height;   // cm
+    private String weight;   // kg
 
+    private String sex;
     private String name;
     private String breed;
     private String photoPath;
@@ -27,36 +27,36 @@ public class Pet implements Serializable {
         this.name = name;
     }
 
-    public float getAge() {
+    public String getAge() {
         return age;
     }
 
-    public void setAge(float age) {
+    public void setAge(String age) {
         this.age = age;
     }
 
-    public int getHeight() {
+    public String getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(String height) {
         this.height = height;
     }
 
-    public boolean isSex() {
-        return sex;
-    }
-
-    public void setSex(boolean sex) {
-        this.sex = sex;
-    }
-
-    public float getWeight() {
+    public String getWeight() {
         return weight;
     }
 
-    public void setWeight(float weight) {
+    public void setWeight(String weight) {
         this.weight = weight;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 
     public String getName() {

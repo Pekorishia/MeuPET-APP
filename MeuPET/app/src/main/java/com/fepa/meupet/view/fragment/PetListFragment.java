@@ -183,7 +183,6 @@ public class PetListFragment extends ListFragment implements ActionMode.Callback
                 // updates item color
                 this.setItemColor(this.itemSelected, Color.TRANSPARENT);
 
-                // removes item
                 this.adapter.removeItem(this.itemSelected);
                 break;
 

@@ -90,7 +90,23 @@
     <string name="pet_image_button_text">Foto</string>
 
     <!--Pet-->
+    <string name="pet_info">Informações</string>
+    <string name="pet_info_age">anos</string>
+    <string name="pet_info_height">cm</string>
+    <string name="pet_info_weight">kg</string>
+    <string name="pet_location">Localização</string>
     <string name="pet_notification">Notificações</string>
+    <string name="pet_activityLevel">Nível de Atividade</string>
+    <string name="pet_eatingHabits">Hábitos Alimentares</string>
+
+    <!--Edit Pet-->
+    <string name="dialog_pet_breed">Raça</string>
+    <string name="dialog_pet_age">Idade</string>
+    <string name="dialog_pet_sex">Sexo :</string>
+    <string name="dialog_pet_female">Fêmea</string>
+    <string name="dialog_pet_male">Macho</string>
+    <string name="dialog_pet_height">Altura (cm)</string>
+    <string name="dialog_pet_weight">Peso (Kg)</string>
 
     <!--Notification-->
     <string name="dialog_notification_name">Nome</string>
