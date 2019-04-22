@@ -1,14 +1,26 @@
 package com.fepa.meupet.view.activity;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,6 +36,16 @@ import com.fepa.meupet.control.dialog.EditPetInfoDialog;
 import com.fepa.meupet.model.agent.pet.Pet;
 import com.fepa.meupet.model.environment.constants.GeneralConfig;
 import com.fepa.meupet.model.environment.notification.Notification;
+import com.fepa.meupet.model.environment.permissions.Permissions;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,12 +58,16 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
-public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.EditPetInfoDialogListener, AdapterView.OnItemClickListener {
+public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.EditPetInfoDialogListener, AdapterView.OnItemClickListener, OnMapReadyCallback{
 
     private Pet pet;
+    private GoogleMap map;
     private ListView listView;
     private BroadcastReceiver receiver;
     private NotificationItemAdapter adapter;
@@ -55,6 +81,7 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
     private FirebaseAuth auth;
     private FirebaseDatabase database;
     private DatabaseReference reference;
+    private ChildEventListener childEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +90,9 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) this.getSupportFragmentManager().findFragmentById(R.id.fPetMap);
+        mapFragment.getMapAsync(this);
 
         this.tvPetAge = this.findViewById(R.id.tvPetAge);
         this.tvPetSex = this.findViewById(R.id.tvPetSex);
@@ -178,6 +208,71 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
         this.updatePetInfo();
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        this.map = googleMap;
+
+        // shows both the satellite and the places name
+        this.map.setMapType(googleMap.MAP_TYPE_NORMAL);
+
+        // sets the ui interaction that the map will have
+        this.map.getUiSettings().setZoomControlsEnabled(true);
+        this.map.getUiSettings().setMyLocationButtonEnabled(true);
+        this.map.getUiSettings().setMapToolbarEnabled(true);
+        this.map.getUiSettings().setRotateGesturesEnabled(false);
+
+        // automatically updates the pet location
+        this.updatePetLocation();
+    }
+
+    private void updatePetLocation(){
+        String email = this.auth.getCurrentUser().getEmail().replace(".", "");
+
+        this.reference = this.database
+                .getReference(GeneralConfig.DB_PATH_COLLAR);
+
+        this.childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                String location = dataSnapshot.child("location").getValue().toString();
+
+                if (!location.equals("")){
+                    // creates a new marker
+                    MarkerOptions marker = new MarkerOptions();
+
+                    // split the received string into latitude and longitude values
+                    String[] locationValues = location.split(",");
+                    LatLng petLocation = new LatLng(Double.valueOf(locationValues[0]), Double.valueOf(locationValues[1]));
+
+                    // puts the marker on the pet location
+                    marker.title(pet.getName())
+                            .position(petLocation)
+                            .icon(BitmapDescriptorFactory.defaultMarker(30));
+
+
+                    // shows it on the map
+                    map.addMarker(marker);
+
+                    // moves the camera there
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(petLocation, 12));
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {}
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        };
+
+        this.reference.orderByKey().limitToLast(5).addChildEventListener(this.childEventListener);
+    }
 
     private void updatePetDB(){
         String email = this.auth.getCurrentUser().getEmail().replace(".", "");
@@ -208,21 +303,7 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
 
                     }
                 });
-
-//        Map<String, Object> update = new HashMap<>();
-//        update.put(chave, pet);
-//
-//        this.reference.updateChildren(update).addOnCompleteListener(new OnCompleteListener<Void>() {
-//            @Override
-//            public void onComplete(@NonNull Task<Void> task) {
-//                if (task.isSuccessful())
-//                    Toast.makeText(PetActivity.this, "Dados Atualizados com Sucesso", Toast.LENGTH_SHORT).show();
-//                else
-//                    Toast.makeText(PetActivity.this, "Erro ao atualizar", Toast.LENGTH_SHORT).show();
-//            }
-//        });
     }
-
 
     private void updatePetInfo(){
         this.tvPetAge.setText(this.pet.getAge() + " " + getString(R.string.pet_info_age));

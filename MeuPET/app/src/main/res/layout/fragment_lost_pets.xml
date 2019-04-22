@@ -12,6 +12,6 @@
         android:gravity="center"
         android:textStyle="bold"
         android:textSize="30sp"
-        android:text="LOST PETS FRAGMENT HERE!!" />
+        android:text="EM CONSTRUÇÃO!" />
 
 </FrameLayout>

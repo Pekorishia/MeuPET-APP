@@ -115,7 +115,7 @@ public class HomeActivity extends AppCompatActivity {
         this.pagerAdapter.addFragments(new SearchMapFragment());
         this.pagerAdapter.addFragments(new PetListFragment());
         this.pagerAdapter.addFragments(new CalendarFragment());
-        this.pagerAdapter.addFragments(new LostPetsFragment());
+//        this.pagerAdapter.addFragments(new LostPetsFragment());
         this.pagerAdapter.addFragments(new SettingsFragment());
     }
 

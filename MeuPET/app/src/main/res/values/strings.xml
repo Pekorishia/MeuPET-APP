@@ -49,7 +49,7 @@
         <item>Mapa</item>
         <item>Pets</item>
         <item>Calendário</item>
-        <item>Perdidos</item>
+        <!--<item>Perdidos</item>-->
         <item>Configuração</item>
     </string-array>
 
@@ -57,7 +57,7 @@
         <item>@drawable/location_icon</item>
         <item>@drawable/paw_icon</item>
         <item>@drawable/calendar_icon</item>
-        <item>@drawable/location_icon</item>
+        <!--<item>@drawable/location_icon</item>-->
         <item>@drawable/settings_icon</item>
     </array>
 
