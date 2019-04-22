@@ -1,10 +1,22 @@
 package com.fepa.meupet.view.fragment;
 
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +29,7 @@ import com.fepa.meupet.R;
 import com.fepa.meupet.control.dialog.SearchMapFilterDialog;
 import com.fepa.meupet.model.agent.map.Geolocation;
 import com.fepa.meupet.model.environment.constants.GeneralConfig;
+import com.fepa.meupet.model.environment.permissions.Permissions;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -31,14 +44,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class SearchMapFragment extends android.support.v4.app.Fragment implements OnMapReadyCallback {
 
     private GoogleMap map;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
+    private String[] permissions = new String[]{Manifest.permission.ACCESS_FINE_LOCATION};
 
     private String[] options;
     private boolean[] checkList;
@@ -59,6 +77,7 @@ public class SearchMapFragment extends android.support.v4.app.Fragment implement
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        Permissions.validatePermissions(this.permissions, getActivity(), 1);
     }
 
 
@@ -72,7 +91,7 @@ public class SearchMapFragment extends android.support.v4.app.Fragment implement
                 .findFragmentById(R.id.mapSearch);
         mapFragment.getMapAsync(this);
 
-       this.database = FirebaseDatabase.getInstance();
+        this.database = FirebaseDatabase.getInstance();
 
         return view;
     }
@@ -85,14 +104,14 @@ public class SearchMapFragment extends android.support.v4.app.Fragment implement
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.actSMapFilter :
+        switch (item.getItemId()) {
+            case R.id.actSMapFilter:
                 SearchMapFilterDialog multiple = new SearchMapFilterDialog();
                 Bundle data = new Bundle();
                 data.putBooleanArray("checklist", checkList);
                 multiple.setArguments(data);
                 multiple.setTargetFragment(this, GeneralConfig.Maps.SEARCH_MAP_REQUEST_CODE);
-                multiple.show(getActivity().getSupportFragmentManager(),"dialogMultiple");
+                multiple.show(getActivity().getSupportFragmentManager(), "dialogMultiple");
                 return true;
 
             default:
@@ -103,8 +122,8 @@ public class SearchMapFragment extends android.support.v4.app.Fragment implement
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode ==  GeneralConfig.Maps.SEARCH_MAP_REQUEST_CODE
-                && resultCode == GeneralConfig.RESULT_OK){
+        if (requestCode == GeneralConfig.Maps.SEARCH_MAP_REQUEST_CODE
+                && resultCode == GeneralConfig.RESULT_OK) {
 
             // gets the boolean array that marks each checked option
             this.checkList = data.getBooleanArrayExtra(GeneralConfig.Maps.SEARCH_MAP_BUNDLE);
@@ -119,26 +138,74 @@ public class SearchMapFragment extends android.support.v4.app.Fragment implement
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        this.map = googleMap;
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        this.setupMarkersSet();
-
-        // shows both the satellite and the places name
-        this.map.setMapType(googleMap.MAP_TYPE_NORMAL);
-
-        // sets the ui interaction that the map will have
-        this.map.getUiSettings().setZoomControlsEnabled(true);
-        this.map.getUiSettings().setMyLocationButtonEnabled(true);
-        this.map.getUiSettings().setMapToolbarEnabled(true);
-        this.map.getUiSettings().setRotateGesturesEnabled(false);
-
-        // TODO: GET THE PERSON POSITION INSTEAD OF NATAL
-        // Add a marker in Natal and move the camera there
-        LatLng natal = new LatLng(-5.814940, -35.222929);
-        this.map.moveCamera(CameraUpdateFactory.newLatLngZoom(natal, 10));
+        for (int permissionResult : grantResults) {
+            if (permissionResult == PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    locationManager.requestLocationUpdates(
+                            LocationManager.GPS_PROVIDER,
+                            0,
+                            0,
+                            locationListener
+                    );
+                }
+            }
+        }
     }
 
+
+    @Override
+    public void onMapReady(final GoogleMap googleMap) {
+        this.map = googleMap;
+
+        this.locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        this.locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                LatLng userPosition = new LatLng(location.getLatitude(), location.getLongitude());
+
+                map.addMarker(new MarkerOptions().position(userPosition).title("Meu Local"));
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(userPosition, 12));
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            this.locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    6000,
+                    20,
+                    locationListener
+            );
+        }
+
+        setupMarkersSet();
+
+        // shows both the satellite and the places name
+        map.setMapType(googleMap.MAP_TYPE_NORMAL);
+
+        // sets the ui interaction that the map will have
+        map.getUiSettings().setZoomControlsEnabled(true);
+        map.getUiSettings().setMyLocationButtonEnabled(true);
+        map.getUiSettings().setMapToolbarEnabled(true);
+        map.getUiSettings().setRotateGesturesEnabled(false);
+    }
 
     private void setupMarkersSet(){
         this.options = getActivity().getResources().getStringArray(R.array.smap_dialog_options);
@@ -171,7 +238,6 @@ public class SearchMapFragment extends android.support.v4.app.Fragment implement
                 MarkerOptions marker;
 
                 float color = Float.parseFloat(dataSnapshot.child("color").getValue().toString());
-
 
                 // for every location
                 for (DataSnapshot data: dataSnapshot.getChildren()){
