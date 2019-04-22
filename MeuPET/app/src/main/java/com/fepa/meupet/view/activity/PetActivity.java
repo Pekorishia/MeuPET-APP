@@ -69,6 +69,7 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
     private Pet pet;
     private GoogleMap map;
     private ListView listView;
+    private ActionBar actionBar;
     private BroadcastReceiver receiver;
     private NotificationItemAdapter adapter;
 
@@ -88,90 +89,18 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pet);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
         SupportMapFragment mapFragment = (SupportMapFragment) this.getSupportFragmentManager().findFragmentById(R.id.fPetMap);
         mapFragment.getMapAsync(this);
 
-        this.tvPetAge = this.findViewById(R.id.tvPetAge);
-        this.tvPetSex = this.findViewById(R.id.tvPetSex);
-        this.tvPetBreed = this.findViewById(R.id.tvPetBreed);
-        this.tvPetHeight = this.findViewById(R.id.tvPetHeight);
-        this.tvPetWeight = this.findViewById(R.id.tvPetWeight);
+        // initiates local variables
+        this.startVariables();
 
-        this.database = FirebaseDatabase.getInstance();
-        this.auth = FirebaseAuth.getInstance();
+        // handles the pet information
+        this.petInfoHandler();
 
-        ImageView ivPet = this.findViewById(R.id.ivPet);
-        TextView tvPetName = this.findViewById(R.id.tvPetName);
-        ImageView ivAddNotification = this.findViewById(R.id.ivAddNotification);
-        ImageView ivEditPetInfo = this.findViewById(R.id.ivEditPetInfo);
+        // handles notification
+        this.notificationHandler();
 
-        // receives the intent from PetListFragment
-        Intent it = getIntent();
-
-        // gets the Pet from the bundle
-        this.pet = (Pet) it.getSerializableExtra(GeneralConfig.Pets.PET_BUNDLE);
-
-        // if the bundle wasn't null
-        if (this.pet != null){
-            tvPetName.setText(this.pet.getName());
-
-            if (this.pet.getPhotoPath() == null || this.pet.getPhotoPath().equals(""))
-                ivPet.setImageResource(R.mipmap.ic_launcher_round);
-            else
-                ivPet.setImageBitmap(BitmapFactory.decodeFile(pet.getPhotoPath()));
-
-            // updates the info fields
-            this.updatePetInfo();
-
-            // changes the title of the activity
-            actionBar.setTitle(pet.getName());
-        }
-
-        this.setupListView();
-
-        this.receiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Notification notification = (Notification) intent
-                        .getSerializableExtra(GeneralConfig.Notifications.NOTIFICATION_BUNDLE);
-
-                adapter.addItem(notification);
-                adapter.notifyDataSetChanged();
-            }
-        };
-
-        ivAddNotification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AddNotificationDialog notificationDialog = new AddNotificationDialog();
-                notificationDialog.show(getSupportFragmentManager(),"notificationDialog");
-            }
-        });
-
-        ivEditPetInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EditPetInfoDialog editPetInfoDialog = new EditPetInfoDialog();
-                Bundle data = new Bundle();
-                data.putSerializable("pet", pet);
-                editPetInfoDialog.setArguments(data);
-                editPetInfoDialog.show(getSupportFragmentManager(),"EditPetDialog");
-            }
-        });
-    }
-
-    private void setupListView(){
-
-        this.listView = this.findViewById(android.R.id.list);
-        this.listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
-        this.adapter = new NotificationItemAdapter(this);
-        this.listView.setAdapter(adapter);
-
-        this.listView.setOnItemClickListener(this);
     }
 
     @Override
@@ -223,6 +152,97 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
 
         // automatically updates the pet location
         this.updatePetLocation();
+    }
+
+
+    private void startVariables(){
+        this.actionBar = getSupportActionBar();
+        this.actionBar.setDisplayHomeAsUpEnabled(true);
+
+        this.tvPetAge = this.findViewById(R.id.tvPetAge);
+        this.tvPetSex = this.findViewById(R.id.tvPetSex);
+        this.tvPetBreed = this.findViewById(R.id.tvPetBreed);
+        this.tvPetHeight = this.findViewById(R.id.tvPetHeight);
+        this.tvPetWeight = this.findViewById(R.id.tvPetWeight);
+
+        this.database = FirebaseDatabase.getInstance();
+        this.auth = FirebaseAuth.getInstance();
+    }
+
+    private void petInfoHandler(){
+        ImageView ivPet = this.findViewById(R.id.ivPet);
+        TextView tvPetName = this.findViewById(R.id.tvPetName);
+        ImageView ivEditPetInfo = this.findViewById(R.id.ivEditPetInfo);
+
+        // receives the intent from PetListFragment
+        Intent it = getIntent();
+
+        // gets the Pet from the bundle
+        this.pet = (Pet) it.getSerializableExtra(GeneralConfig.Pets.PET_BUNDLE);
+
+        // if the bundle wasn't null
+        if (this.pet != null){
+            tvPetName.setText(this.pet.getName());
+
+            if (this.pet.getPhotoPath() == null || this.pet.getPhotoPath().equals(""))
+                ivPet.setImageResource(R.mipmap.ic_launcher_round);
+            else
+                ivPet.setImageBitmap(BitmapFactory.decodeFile(pet.getPhotoPath()));
+
+            // updates the info fields
+            this.updatePetInfo();
+
+            // changes the title of the activity
+            actionBar.setTitle(pet.getName());
+        }
+
+        ivEditPetInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditPetInfoDialog editPetInfoDialog = new EditPetInfoDialog();
+                Bundle data = new Bundle();
+                data.putSerializable("pet", pet);
+                editPetInfoDialog.setArguments(data);
+                editPetInfoDialog.show(getSupportFragmentManager(),"EditPetDialog");
+            }
+        });
+    }
+
+    private void notificationHandler(){
+
+        ImageView ivAddNotification = this.findViewById(R.id.ivAddNotification);
+
+        this.setupListView();
+
+        this.receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Notification notification = (Notification) intent
+                        .getSerializableExtra(GeneralConfig.Notifications.NOTIFICATION_BUNDLE);
+
+                adapter.addItem(notification);
+                adapter.notifyDataSetChanged();
+            }
+        };
+
+        ivAddNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddNotificationDialog notificationDialog = new AddNotificationDialog();
+                notificationDialog.show(getSupportFragmentManager(),"notificationDialog");
+            }
+        });
+    }
+
+    private void setupListView(){
+
+        this.listView = this.findViewById(android.R.id.list);
+        this.listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+        this.adapter = new NotificationItemAdapter(this);
+        this.listView.setAdapter(adapter);
+
+        this.listView.setOnItemClickListener(this);
     }
 
     private void updatePetLocation(){
