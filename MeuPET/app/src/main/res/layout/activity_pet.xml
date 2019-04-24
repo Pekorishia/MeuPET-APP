@@ -191,6 +191,37 @@
                 android:layout_marginBottom="20dp"
                 android:background="@color/separator"/>
 
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="20dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pet_led_strip"
+                    android:layout_weight="5"
+                    android:textSize="20sp"/>
+
+                <Switch
+                    android:id="@+id/wLedStrip"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:textColor="#656565"
+                    android:textSize="20sp"
+                    android:text="@string/pet_led_strip_switch" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="20dp"
+                android:background="@color/separator"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

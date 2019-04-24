@@ -61,6 +61,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -69,12 +70,14 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
 
     private Pet pet;
     private GoogleMap map;
+    private boolean ledStrip;
     private ListView listView;
     private ActionBar actionBar;
     private LineChart lcActivitylvl;
     private LineChart lcEatingHabits;
     private BroadcastReceiver receiver;
     private NotificationItemAdapter adapter;
+    private LinkedHashMap<String, String> activityValues;
 
     private TextView tvPetAge;
     private TextView tvPetSex;
@@ -160,12 +163,14 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
         this.map.getUiSettings().setRotateGesturesEnabled(false);
 
         // automatically updates the pet location
-        this.updatePetLocation();
+        this.petCollarListener();
     }
 
     private void startVariables(){
         this.actionBar = getSupportActionBar();
         this.actionBar.setDisplayHomeAsUpEnabled(true);
+
+        this.activityValues = new LinkedHashMap<>();
 
         this.tvPetAge = this.findViewById(R.id.tvPetAge);
         this.tvPetSex = this.findViewById(R.id.tvPetSex);
@@ -255,7 +260,7 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
         });
     }
 
-    private void updatePetLocation(){
+    private void petCollarListener(){
         String email = this.auth.getCurrentUser().getEmail().replace(".", "");
 
         this.reference = this.database
@@ -264,27 +269,32 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
         this.childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                String location = dataSnapshot.child("location").getValue().toString();
+                String time = "";
+                String location = "";
+                String activityLvl = "";
 
-                if (!location.equals("")){
-                    // creates a new marker
-                    MarkerOptions marker = new MarkerOptions();
+                // if the current node is "statistic"
+                if (dataSnapshot.getKey().equals(GeneralConfig.DB_PATH_COLLAR_STATISTIC)) {
+                    // for every id
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        // updates the newest not empty location
+                        if(!snapshot.child("location").getValue().toString().equals(""))
+                            location = snapshot.child("location").getValue().toString();
 
-                    // split the received string into latitude and longitude values
-                    String[] locationValues = location.split(",");
-                    LatLng petLocation = new LatLng(Double.valueOf(locationValues[0]), Double.valueOf(locationValues[1]));
+                        time = snapshot.child("time").getValue().toString();
+                        activityLvl = snapshot.child("activity_level").getValue().toString();
 
-                    // puts the marker on the pet location
-                    marker.title(pet.getName())
-                            .position(petLocation)
-                            .icon(BitmapDescriptorFactory.defaultMarker(30));
+                        // adds the current values to the activity level LinkedHashMap
+                        activityValues.put(time, activityLvl);
+                    }
 
-
-                    // shows it on the map
-                    map.addMarker(marker);
-
-                    // moves the camera there
-                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(petLocation, 12));
+                    // updates pet location on the map
+                    updatePetLocation(location);
+                    // add the map entries based on the data chart return
+                    addEntry(lcActivitylvl, generateActivityChartData());
+                } else {
+                    // get the current led strip value
+                    ledStrip = (boolean) dataSnapshot.getValue();
                 }
             }
 
@@ -301,9 +311,85 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         };
 
-        this.reference.orderByKey().limitToLast(5).addChildEventListener(this.childEventListener);
+        this.reference.orderByKey().addChildEventListener(this.childEventListener);
     }
 
+    private void updatePetLocation(String location){
+        if (!location.equals("")){
+            // creates a new marker
+            MarkerOptions marker = new MarkerOptions();
+
+            // split the received string into latitude and longitude values
+            String[] locationValues = location.split(",");
+            LatLng petLocation = new LatLng(Double.valueOf(locationValues[0]), Double.valueOf(locationValues[1]));
+
+            // puts the marker on the pet location
+            marker.title(pet.getName())
+                    .position(petLocation)
+                    .icon(BitmapDescriptorFactory.defaultMarker(30));
+
+            // shows it on the map
+            this.map.addMarker(marker);
+
+            // moves the camera there
+            this.map.moveCamera(CameraUpdateFactory.newLatLngZoom(petLocation, 12));
+        }
+    }
+
+    private ArrayList<Entry> generateActivityChartData(){
+        ArrayList<Entry> data = new ArrayList<>();
+
+        Date date = null;
+        int count = 0;
+
+        // loops through each value read from the DB in order
+        for (Map.Entry map : this.activityValues.entrySet()) {
+            //            // if this is the first loop
+            if (date == null){
+                try {
+                    // get the String time and parse it to date
+                    date = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH)
+                                    .parse(map.getKey().toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                // if the current map value is high, increments the count value
+                if (map.getValue().toString().equals("high"))
+                    count++;
+            } else {
+                // initiates a foo date
+                Date foo = null;
+                try {
+                    // get the current map date value
+                    foo = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH)
+                            .parse(map.getKey().toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                // if the hours don't match, it means that the previous date hour ended
+                if (foo != null && date.getHours() != foo.getHours()){
+                    // populates the Entries array
+                    data.add(new Entry(TimeUnit.MILLISECONDS.toHours(date.getTime()), count));
+
+                    // updates the date variable
+                    date = foo;
+                    // resets the count
+                    count = 0;
+                } else {
+                    // if the current map value is high, increments the count value
+                    if (map.getValue().toString().equals("high"))
+                        count++;
+                }
+            }
+        }
+
+        // adds the final hour that was left
+        data.add(new Entry(TimeUnit.MILLISECONDS.toHours(date.getTime()), count));
+
+        return data;
+    }
+    
     private void updatePetDB(){
         String email = this.auth.getCurrentUser().getEmail().replace(".", "");
 
@@ -411,39 +497,8 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
 
     private void setActivityLevelData(final LineChart chart) {
 
-
-        // gets all dates and activity levels
-        // create a LinkedHashMap < string dates, activity levels>
-        // gets the first data string to be the start time
-        // counts the number of highs for every hour and create a LinkedHashMap <init date for every hour, number of highs>
-        // populate the dataset with the last map
-
-        String input = " 07 Apr 2019 21:51:31 ";
-        Date date = null;
-        try {
-            date = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH).parse(input);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        long milliseconds = TimeUnit.MILLISECONDS.toHours(date.getTime());
-
-        // now in hours
-//        long now = TimeUnit.MILLISECONDS.toHours(System.currentTimeMillis());
-
-        ArrayList<Entry> values = new ArrayList<>();
-
-        // count = hours
-        float to = (float) milliseconds + 24;
-
-        // increment by 1 hour
-        for (float x = milliseconds; x < to; x++) {
-
-            float y = (float) (Math.random() * 60) + 0;
-            values.add(new Entry(x, y)); // add one entry per hour
-        }
-
         // create a dataset and give it a type
-        LineDataSet dataSet = new LineDataSet(values, getString(R.string.pet_activity_lvl_dataSet));
+        LineDataSet dataSet = new LineDataSet(null, getString(R.string.pet_activity_lvl_dataSet));
         dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
         dataSet.setColor(ColorTemplate.getHoloBlue());
         dataSet.setLineWidth(1.5f);
@@ -541,4 +596,23 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
         chart.invalidate();
     }
 
+    private void addEntry(LineChart chart, ArrayList<Entry> values) {
+        LineData data = chart.getData();
+
+        ILineDataSet set = data.getDataSetByIndex(0);
+
+        for (Entry entry: values) {
+            data.addEntry(entry, 0);
+        }
+        
+        data.notifyDataChanged();
+
+        // lets the chart know it's data has changed
+        chart.notifyDataSetChanged();
+
+        chart.setVisibleXRangeMaximum(6);
+
+        // automatically refreshes the chart (calls invalidate())
+        chart.moveViewToX(data.getEntryCount());
+    }
 }

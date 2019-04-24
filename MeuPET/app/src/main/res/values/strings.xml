@@ -95,11 +95,13 @@
     <string name="pet_info_height">cm</string>
     <string name="pet_info_weight">kg</string>
     <string name="pet_location">Localização</string>
+    <string name="pet_led_strip">Luz Noturna</string>
+    <string name="pet_led_strip_switch">Ligar</string>
     <string name="pet_notification">Notificações</string>
     <string name="pet_activityLevel">Nível de Atividade</string>
     <string name="pet_eatingHabits">Hábitos Alimentares</string>
 
-        <!--Activity Level Chart-->
+        <!--Charts-->
     <string name="pet_activity_lvl_dataSet">Tempo em alta atividade (min)</string>
     <string name="pet_eating_habit_dataSet">Quantidade de comida (g)</string>
 
