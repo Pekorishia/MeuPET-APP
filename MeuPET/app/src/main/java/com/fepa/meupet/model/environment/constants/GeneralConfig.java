@@ -41,12 +41,10 @@ public final class GeneralConfig {
 
     // Pets
     public final class Pets {
-        public static final int START_PET_TAB = 1;
         public static final int PET_ADD_REQUEST_CODE = 10;
-        public static final String MALE = "male";
-        public static final String FEMALE = "female";
         public static final String PET_BUNDLE = "petBundle";
-        public static final String PET_INFO_BUNDLE = "petInfoBundle";
+        public static final int ACTIVITY_LVL_CHART = 0;
+        public static final int EATING_HABITS_CHART = 1;
     }
 
     // Preference Mode

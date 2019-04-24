@@ -1,26 +1,18 @@
 package com.fepa.meupet.view.activity;
 
-import android.Manifest;
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -36,18 +28,26 @@ import com.fepa.meupet.control.dialog.EditPetInfoDialog;
 import com.fepa.meupet.model.agent.pet.Pet;
 import com.fepa.meupet.model.environment.constants.GeneralConfig;
 import com.fepa.meupet.model.environment.notification.Notification;
-import com.fepa.meupet.model.environment.permissions.Permissions;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IFillFormatter;
+import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.utils.Utils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -56,13 +56,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
-import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.EditPetInfoDialogListener, AdapterView.OnItemClickListener, OnMapReadyCallback{
 
@@ -70,6 +71,8 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
     private GoogleMap map;
     private ListView listView;
     private ActionBar actionBar;
+    private LineChart lcActivitylvl;
+    private LineChart lcEatingHabits;
     private BroadcastReceiver receiver;
     private NotificationItemAdapter adapter;
 
@@ -97,6 +100,12 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
 
         // handles the pet information
         this.petInfoHandler();
+
+        // handles the activity level chart
+        this.chartHandler(this.lcActivitylvl, GeneralConfig.Pets.ACTIVITY_LVL_CHART);
+
+        // handles the eating habits chart
+        this.chartHandler(this.lcEatingHabits, GeneralConfig.Pets.EATING_HABITS_CHART);
 
         // handles notification
         this.notificationHandler();
@@ -154,7 +163,6 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
         this.updatePetLocation();
     }
 
-
     private void startVariables(){
         this.actionBar = getSupportActionBar();
         this.actionBar.setDisplayHomeAsUpEnabled(true);
@@ -164,9 +172,48 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
         this.tvPetBreed = this.findViewById(R.id.tvPetBreed);
         this.tvPetHeight = this.findViewById(R.id.tvPetHeight);
         this.tvPetWeight = this.findViewById(R.id.tvPetWeight);
+        this.lcActivitylvl = this.findViewById(R.id.lcActivityLevel);
+        this.lcEatingHabits = this.findViewById(R.id.lcEatingHabits);
 
         this.database = FirebaseDatabase.getInstance();
         this.auth = FirebaseAuth.getInstance();
+    }
+
+    private void notificationHandler(){
+
+        ImageView ivAddNotification = this.findViewById(R.id.ivAddNotification);
+
+        this.setupListView();
+
+        this.receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Notification notification = (Notification) intent
+                        .getSerializableExtra(GeneralConfig.Notifications.NOTIFICATION_BUNDLE);
+
+                adapter.addItem(notification);
+                adapter.notifyDataSetChanged();
+            }
+        };
+
+        ivAddNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddNotificationDialog notificationDialog = new AddNotificationDialog();
+                notificationDialog.show(getSupportFragmentManager(),"notificationDialog");
+            }
+        });
+    }
+
+    private void setupListView(){
+
+        this.listView = this.findViewById(android.R.id.list);
+        this.listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+        this.adapter = new NotificationItemAdapter(this);
+        this.listView.setAdapter(adapter);
+
+        this.listView.setOnItemClickListener(this);
     }
 
     private void petInfoHandler(){
@@ -206,43 +253,6 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
                 editPetInfoDialog.show(getSupportFragmentManager(),"EditPetDialog");
             }
         });
-    }
-
-    private void notificationHandler(){
-
-        ImageView ivAddNotification = this.findViewById(R.id.ivAddNotification);
-
-        this.setupListView();
-
-        this.receiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Notification notification = (Notification) intent
-                        .getSerializableExtra(GeneralConfig.Notifications.NOTIFICATION_BUNDLE);
-
-                adapter.addItem(notification);
-                adapter.notifyDataSetChanged();
-            }
-        };
-
-        ivAddNotification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AddNotificationDialog notificationDialog = new AddNotificationDialog();
-                notificationDialog.show(getSupportFragmentManager(),"notificationDialog");
-            }
-        });
-    }
-
-    private void setupListView(){
-
-        this.listView = this.findViewById(android.R.id.list);
-        this.listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
-        this.adapter = new NotificationItemAdapter(this);
-        this.listView.setAdapter(adapter);
-
-        this.listView.setOnItemClickListener(this);
     }
 
     private void updatePetLocation(){
@@ -332,4 +342,203 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
         this.tvPetHeight.setText(this.pet.getHeight() + " " + getString(R.string.pet_info_height));
         this.tvPetWeight.setText(this.pet.getWeight() + " " + getString(R.string.pet_info_weight));
     }
+
+    private void chartHandler(LineChart chart, int chartType){
+
+        //sets all charts parameters modifiers
+        this.setChartParameters(chart);
+
+        this.setXAxis(chart);
+
+        if (chartType == GeneralConfig.Pets.ACTIVITY_LVL_CHART){
+            this.setActivityLevelData(chart);
+            this.setYAxis(chart, 60);
+        }
+        else if (chartType == GeneralConfig.Pets.EATING_HABITS_CHART){
+            this.setEatingHabitsData(chart);
+            this.setYAxis(chart, 500);
+        }
+    }
+
+    private void setChartParameters(LineChart chart){
+        // removes description text
+        chart.getDescription().setEnabled(false);
+
+        chart.setDragDecelerationFrictionCoef(0.9f);
+
+        // enables touch, scaling and dragging
+        chart.setPinchZoom(true);
+        chart.setDragEnabled(true);
+        chart.setTouchEnabled(true);
+        chart.setScaleEnabled(true);
+        chart.setDrawGridBackground(false);
+        chart.setHighlightPerDragEnabled(true);
+    }
+
+    private void setXAxis(LineChart chart){
+        XAxis xAxis = chart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setTextSize(10f);
+        xAxis.setDrawAxisLine(false);
+        xAxis.setDrawGridLines(false);
+        xAxis.setTextColor(Color.rgb(0, 0, 0));
+        xAxis.setCenterAxisLabels(true);
+        xAxis.setGranularity(1f); // one hour
+        xAxis.setValueFormatter(new IAxisValueFormatter() {
+
+            private final SimpleDateFormat mFormat = new SimpleDateFormat("dd/MM HH:mm", Locale.ENGLISH);
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                long millis = TimeUnit.HOURS.toMillis((long) value);
+                return mFormat.format(new Date(millis));
+            }
+        });
+    }
+
+    private void setYAxis(LineChart chart, int maxValue){
+        YAxis leftAxis = chart.getAxisLeft();
+        leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
+        leftAxis.setTextColor(ColorTemplate.getHoloBlue());
+        leftAxis.setDrawGridLines(true);
+        leftAxis.setGranularityEnabled(true);
+        leftAxis.setAxisMinimum(0);
+        leftAxis.setAxisMaximum(maxValue);
+        leftAxis.setTextColor(Color.rgb(0, 0, 0));
+
+        YAxis rightAxis = chart.getAxisRight();
+        rightAxis.setEnabled(false);
+    }
+
+    private void setActivityLevelData(final LineChart chart) {
+
+
+        // gets all dates and activity levels
+        // create a LinkedHashMap < string dates, activity levels>
+        // gets the first data string to be the start time
+        // counts the number of highs for every hour and create a LinkedHashMap <init date for every hour, number of highs>
+        // populate the dataset with the last map
+
+        String input = " 07 Apr 2019 21:51:31 ";
+        Date date = null;
+        try {
+            date = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH).parse(input);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long milliseconds = TimeUnit.MILLISECONDS.toHours(date.getTime());
+
+        // now in hours
+//        long now = TimeUnit.MILLISECONDS.toHours(System.currentTimeMillis());
+
+        ArrayList<Entry> values = new ArrayList<>();
+
+        // count = hours
+        float to = (float) milliseconds + 24;
+
+        // increment by 1 hour
+        for (float x = milliseconds; x < to; x++) {
+
+            float y = (float) (Math.random() * 60) + 0;
+            values.add(new Entry(x, y)); // add one entry per hour
+        }
+
+        // create a dataset and give it a type
+        LineDataSet dataSet = new LineDataSet(values, getString(R.string.pet_activity_lvl_dataSet));
+        dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+        dataSet.setColor(ColorTemplate.getHoloBlue());
+        dataSet.setLineWidth(1.5f);
+        dataSet.setDrawValues(false);
+        dataSet.setDrawCircles(true);
+        dataSet.setDrawCircleHole(false);
+        dataSet.setCircleColor(Color.rgb(160,0,170));
+
+        // sets the filled area
+        dataSet.setDrawFilled(true);
+        dataSet.setFillFormatter(new IFillFormatter() {
+            @Override
+            public float getFillLinePosition(ILineDataSet dataSet, LineDataProvider dataProvider) {
+                return chart.getAxisLeft().getAxisMinimum();
+            }
+        });
+
+        // sets color of filled area
+        if (Utils.getSDKInt() >= 18) {
+            // drawables only supported on api level 18 and above
+            Drawable drawable = ContextCompat.getDrawable(this, R.drawable.fade_activity);
+            dataSet.setFillDrawable(drawable);
+        } else {
+            dataSet.setFillColor(Color.BLACK);
+        }
+
+        // creates a data object with the data sets
+        LineData data = new LineData(dataSet);
+
+        // plots the chart
+        chart.setData(data);
+    }
+
+    private void setEatingHabitsData(final LineChart chart) {
+
+        String input = " 07 Apr 2019 21:51:31 ";
+        Date date = null;
+        try {
+            date = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH).parse(input);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long milliseconds = TimeUnit.MILLISECONDS.toHours(date.getTime());
+
+        // now in hours
+//        long now = TimeUnit.MILLISECONDS.toHours(System.currentTimeMillis());
+
+        ArrayList<Entry> values = new ArrayList<>();
+
+        // count = hours
+        float to = (float) milliseconds + 24;
+        int z = 500;
+
+        // increment by 1 hour
+        for (float x = milliseconds; x < to; x++) {
+
+            z -= 20;
+            values.add(new Entry(x, z)); // add one entry per hour
+        }
+
+        // create a dataset and give it a type
+        LineDataSet dataSet = new LineDataSet(values, getString(R.string.pet_eating_habit_dataSet));
+        dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+//        dataSet.setColor(ColorTemplate.getHoloBlue());
+        dataSet.setColors(Color.rgb(0,0,0), Color.argb(77, 0,0,0));
+        dataSet.setLineWidth(1.5f);
+        dataSet.setDrawValues(false);
+        dataSet.setDrawCircles(true);
+        dataSet.setDrawCircleHole(false);
+        dataSet.setCircleColor(Color.rgb(0,0,0));
+
+        // sets the filled area
+        dataSet.setDrawFilled(true);
+        dataSet.setFillFormatter(new IFillFormatter() {
+            @Override
+            public float getFillLinePosition(ILineDataSet dataSet, LineDataProvider dataProvider) {
+                return chart.getAxisLeft().getAxisMinimum();
+            }
+        });
+
+        // sets color of filled area
+        if (Utils.getSDKInt() >= 18) {
+            // drawables only supported on api level 18 and above
+            Drawable drawable = ContextCompat.getDrawable(this, R.drawable.fade_habits);
+            dataSet.setFillDrawable(drawable);
+        } else {
+            dataSet.setFillColor(Color.BLACK);
+        }
+
+        // create a data object with the data sets
+        LineData data = new LineData(dataSet);
+
+        // set data
+        chart.setData(data);
+        chart.invalidate();
+    }
+
 }

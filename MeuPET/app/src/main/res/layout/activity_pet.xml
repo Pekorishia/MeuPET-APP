@@ -156,9 +156,15 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
                 android:text="@string/pet_activityLevel"
                 android:textSize="20sp"/>
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/lcActivityLevel"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_marginBottom="20dp" />
 
             <View
                 android:layout_width="match_parent"
@@ -169,9 +175,15 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
                 android:text="@string/pet_eatingHabits"
                 android:textSize="20sp"/>
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/lcEatingHabits"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_marginBottom="20dp" />
 
             <View
                 android:layout_width="match_parent"

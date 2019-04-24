@@ -99,6 +99,10 @@
     <string name="pet_activityLevel">Nível de Atividade</string>
     <string name="pet_eatingHabits">Hábitos Alimentares</string>
 
+        <!--Activity Level Chart-->
+    <string name="pet_activity_lvl_dataSet">Tempo em alta atividade (min)</string>
+    <string name="pet_eating_habit_dataSet">Quantidade de comida (g)</string>
+
     <!--Edit Pet-->
     <string name="dialog_pet_breed">Raça</string>
     <string name="dialog_pet_age">Idade</string>
