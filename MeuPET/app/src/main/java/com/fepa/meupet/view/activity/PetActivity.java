@@ -16,8 +16,10 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -69,21 +71,21 @@ import java.util.concurrent.TimeUnit;
 public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.EditPetInfoDialogListener, AdapterView.OnItemClickListener, OnMapReadyCallback{
 
     private Pet pet;
-    private GoogleMap map;
-    private boolean ledStrip;
-    private ListView listView;
-    private ActionBar actionBar;
-    private LineChart lcActivitylvl;
-    private LineChart lcEatingHabits;
     private BroadcastReceiver receiver;
     private NotificationItemAdapter adapter;
     private LinkedHashMap<String, String> activityValues;
 
+    private GoogleMap map;
+    private Switch sledSwitch;
+    private ListView listView;
     private TextView tvPetAge;
     private TextView tvPetSex;
     private TextView tvPetBreed;
     private TextView tvPetHeight;
     private TextView tvPetWeight;
+    private ActionBar actionBar;
+    private LineChart lcActivitylvl;
+    private LineChart lcEatingHabits;
 
     private FirebaseAuth auth;
     private FirebaseDatabase database;
@@ -113,6 +115,12 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
         // handles notification
         this.notificationHandler();
 
+        this.sledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                updateLedStripDB();
+            }
+        });
     }
 
     @Override
@@ -172,6 +180,7 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
 
         this.activityValues = new LinkedHashMap<>();
 
+        this.sledSwitch = this.findViewById(R.id.sLedStrip);
         this.tvPetAge = this.findViewById(R.id.tvPetAge);
         this.tvPetSex = this.findViewById(R.id.tvPetSex);
         this.tvPetBreed = this.findViewById(R.id.tvPetBreed);
@@ -260,6 +269,37 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
         });
     }
 
+    private void updatePetDB(){
+        String email = this.auth.getCurrentUser().getEmail().replace(".", "");
+
+        String key = this.database.getReference(GeneralConfig.DB_PATH_PERSON)
+                .child(email)
+                .getKey();
+
+        this.reference = this.database
+                .getReference(GeneralConfig.DB_PATH_PERSON+key);
+
+        this.reference.orderByChild("name")
+                .equalTo(this.pet.getName())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot child: dataSnapshot.getChildren())
+                        {
+                            String key = child.getKey().toString();
+                            Map<String, Object> update = new HashMap<>();
+                            update.put(key, pet);
+                            reference.updateChildren(update);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
     private void petCollarListener(){
         String email = this.auth.getCurrentUser().getEmail().replace(".", "");
 
@@ -294,7 +334,7 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
                     addEntry(lcActivitylvl, generateActivityChartData());
                 } else {
                     // get the current led strip value
-                    ledStrip = (boolean) dataSnapshot.getValue();
+                    sledSwitch.setChecked(Boolean.parseBoolean(dataSnapshot.getValue().toString()));
                 }
             }
 
@@ -312,6 +352,16 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
         };
 
         this.reference.orderByKey().addChildEventListener(this.childEventListener);
+    }
+
+    private void updateLedStripDB(){
+        this.reference = this.database
+                .getReference(GeneralConfig.DB_PATH_COLLAR);
+
+        Map<String, Object> update = new HashMap<>();
+        update.put(GeneralConfig.DB_PATH_COLLAR_LED_STRIP, this.sledSwitch.isChecked());
+
+        this.reference.updateChildren(update);
     }
 
     private void updatePetLocation(String location){
@@ -388,37 +438,6 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
         data.add(new Entry(TimeUnit.MILLISECONDS.toHours(date.getTime()), count));
 
         return data;
-    }
-    
-    private void updatePetDB(){
-        String email = this.auth.getCurrentUser().getEmail().replace(".", "");
-
-        String key = this.database.getReference(GeneralConfig.DB_PATH_PERSON)
-                .child(email)
-                .getKey();
-
-        this.reference = this.database
-                .getReference(GeneralConfig.DB_PATH_PERSON+key);
-
-        this.reference.orderByChild("name")
-                .equalTo(this.pet.getName())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot child: dataSnapshot.getChildren())
-                        {
-                            String key = child.getKey().toString();
-                            Map<String, Object> update = new HashMap<>();
-                            update.put(key, pet);
-                            reference.updateChildren(update);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
     }
 
     private void updatePetInfo(){
