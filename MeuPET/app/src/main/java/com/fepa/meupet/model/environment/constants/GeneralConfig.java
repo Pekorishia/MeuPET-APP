@@ -21,9 +21,10 @@ public final class GeneralConfig {
     // Firebase database
     public static final String DB_PATH_PERSON = "miauBD/person/";
     public static final String DB_PATH_MAP = "miauBD/searchMap/";
-    public static final String DB_PATH_COLLAR_STATISTIC = "statistic";
+    public static final String DB_PATH_STATISTIC = "statistic";
     public static final String DB_PATH_COLLAR_LED_STRIP = "led_strip";
     public static final String DB_PATH_COLLAR = "miauBD/pet/0100/module/collar/040/";
+    public static final String DB_PATH_FEEDER = "miauBD/pet/0100/module/feeder/050/";
 
     // Register
     public static final String REGISTER_ERROR = "Erro ao cadastrar";

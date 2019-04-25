@@ -301,9 +301,7 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
     }
 
     private void petCollarListener(){
-        String email = this.auth.getCurrentUser().getEmail().replace(".", "");
-
-        this.reference = this.database
+       this.reference = this.database
                 .getReference(GeneralConfig.DB_PATH_COLLAR);
 
         this.childEventListener = new ChildEventListener() {
@@ -314,7 +312,7 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
                 String activityLvl = "";
 
                 // if the current node is "statistic"
-                if (dataSnapshot.getKey().equals(GeneralConfig.DB_PATH_COLLAR_STATISTIC)) {
+                if (dataSnapshot.getKey().equals(GeneralConfig.DB_PATH_STATISTIC)) {
                     // for every id
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         // updates the newest not empty location
@@ -335,6 +333,62 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
                 } else {
                     // get the current led strip value
                     sledSwitch.setChecked(Boolean.parseBoolean(dataSnapshot.getValue().toString()));
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {}
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        };
+
+        this.reference.orderByKey().addChildEventListener(this.childEventListener);
+    }
+
+    private void petFeederListener(){
+        this.reference = this.database
+                .getReference(GeneralConfig.DB_PATH_FEEDER);
+
+        this.childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                String endTime = "";
+                String startTime = "";
+                int endWeight = 0;
+                int startWeight = 0;
+
+                ArrayList<Entry> entries = new ArrayList<>();
+
+                // if the current node is "statistic"
+                if (dataSnapshot.getKey().equals(GeneralConfig.DB_PATH_STATISTIC)) {
+                    // for every id
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        endTime = snapshot.child("end_time").getValue().toString();
+                        startTime = snapshot.child("start_time").getValue().toString();
+                        endWeight = Integer.parseInt(snapshot.child("end_weight").getValue().toString());
+                        startWeight = Integer.parseInt(snapshot.child("start_weight").getValue().toString());
+
+                        Date end = null;
+                        Date start = null;
+                        try {
+                            end = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH)
+                                    .parse(endTime);
+                            start = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH)
+                                    .parse(startTime);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        entries.add(new Entry(TimeUnit.MILLISECONDS.toMinutes(start.getTime()), startWeight));
+                        entries.add(new Entry(TimeUnit.MILLISECONDS.toMinutes(end.getTime()), endWeight));
+                    }
+                    addEntry(lcEatingHabits, entries);
                 }
             }
 
@@ -453,15 +507,16 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
         //sets all charts parameters modifiers
         this.setChartParameters(chart);
 
-        this.setXAxis(chart);
-
         if (chartType == GeneralConfig.Pets.ACTIVITY_LVL_CHART){
-            this.setActivityLevelData(chart);
+            this.setChartStyle(chart, GeneralConfig.Pets.ACTIVITY_LVL_CHART);
+            this.setXAxis(chart, GeneralConfig.Pets.ACTIVITY_LVL_CHART);
             this.setYAxis(chart, 60);
         }
         else if (chartType == GeneralConfig.Pets.EATING_HABITS_CHART){
-            this.setEatingHabitsData(chart);
+            this.setChartStyle(chart, GeneralConfig.Pets.EATING_HABITS_CHART);
+            this.setXAxis(chart, GeneralConfig.Pets.EATING_HABITS_CHART);
             this.setYAxis(chart, 500);
+            this.petFeederListener();
         }
     }
 
@@ -480,7 +535,7 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
         chart.setHighlightPerDragEnabled(true);
     }
 
-    private void setXAxis(LineChart chart){
+    private void setXAxis(LineChart chart, int chartType){
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTextSize(10f);
@@ -488,16 +543,31 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
         xAxis.setDrawGridLines(false);
         xAxis.setTextColor(Color.rgb(0, 0, 0));
         xAxis.setCenterAxisLabels(true);
-        xAxis.setGranularity(1f); // one hour
-        xAxis.setValueFormatter(new IAxisValueFormatter() {
 
-            private final SimpleDateFormat mFormat = new SimpleDateFormat("dd/MM HH:mm", Locale.ENGLISH);
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                long millis = TimeUnit.HOURS.toMillis((long) value);
-                return mFormat.format(new Date(millis));
-            }
-        });
+
+        if (chartType == GeneralConfig.Pets.ACTIVITY_LVL_CHART){
+            xAxis.setGranularity(1f); // one hour
+            xAxis.setValueFormatter(new IAxisValueFormatter() {
+
+                private final SimpleDateFormat mFormat = new SimpleDateFormat("dd/MM HH:mm", Locale.ENGLISH);
+                @Override
+                public String getFormattedValue(float value, AxisBase axis) {
+                    long millis = TimeUnit.HOURS.toMillis((long) value);
+                    return mFormat.format(new Date(millis));
+                }
+            });
+        } else {
+            xAxis.setGranularity(1f); // 1 minute
+            xAxis.setValueFormatter(new IAxisValueFormatter() {
+
+                private final SimpleDateFormat mFormat = new SimpleDateFormat("dd/MM HH:mm", Locale.ENGLISH);
+                @Override
+                public String getFormattedValue(float value, AxisBase axis) {
+                    long millis = TimeUnit.MINUTES.toMillis((long) value);
+                    return mFormat.format(new Date(millis));
+                }
+            });
+        }
     }
 
     private void setYAxis(LineChart chart, int maxValue){
@@ -514,17 +584,25 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
         rightAxis.setEnabled(false);
     }
 
-    private void setActivityLevelData(final LineChart chart) {
+    private void setChartStyle(final LineChart chart, int chartType) {
 
         // create a dataset and give it a type
-        LineDataSet dataSet = new LineDataSet(null, getString(R.string.pet_activity_lvl_dataSet));
+        LineDataSet dataSet;
+
+        if (chartType == GeneralConfig.Pets.ACTIVITY_LVL_CHART){
+            dataSet = new LineDataSet(null, getString(R.string.pet_activity_lvl_dataSet));
+            dataSet.setCircleColor(Color.rgb(160,0,170));
+            dataSet.setColor(ColorTemplate.getHoloBlue());
+        } else {
+            dataSet = new LineDataSet(null, getString(R.string.pet_eating_habit_dataSet));
+            dataSet.setColors(Color.rgb(0,0,0), Color.argb(77, 0,0,0));
+            dataSet.setCircleColor(Color.rgb(0,0,0));
+        }
         dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
-        dataSet.setColor(ColorTemplate.getHoloBlue());
         dataSet.setLineWidth(1.5f);
         dataSet.setDrawValues(false);
         dataSet.setDrawCircles(true);
         dataSet.setDrawCircleHole(false);
-        dataSet.setCircleColor(Color.rgb(160,0,170));
 
         // sets the filled area
         dataSet.setDrawFilled(true);
@@ -538,7 +616,13 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
         // sets color of filled area
         if (Utils.getSDKInt() >= 18) {
             // drawables only supported on api level 18 and above
-            Drawable drawable = ContextCompat.getDrawable(this, R.drawable.fade_activity);
+            Drawable drawable;
+
+            if (chartType == GeneralConfig.Pets.ACTIVITY_LVL_CHART) {
+                drawable = ContextCompat.getDrawable(this, R.drawable.fade_activity);
+            } else {
+                drawable = ContextCompat.getDrawable(this, R.drawable.fade_habits);
+            }
             dataSet.setFillDrawable(drawable);
         } else {
             dataSet.setFillColor(Color.BLACK);
@@ -551,69 +635,69 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
         chart.setData(data);
     }
 
-    private void setEatingHabitsData(final LineChart chart) {
-
-        String input = " 07 Apr 2019 21:51:31 ";
-        Date date = null;
-        try {
-            date = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH).parse(input);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        long milliseconds = TimeUnit.MILLISECONDS.toHours(date.getTime());
-
-        // now in hours
-//        long now = TimeUnit.MILLISECONDS.toHours(System.currentTimeMillis());
-
-        ArrayList<Entry> values = new ArrayList<>();
-
-        // count = hours
-        float to = (float) milliseconds + 24;
-        int z = 500;
-
-        // increment by 1 hour
-        for (float x = milliseconds; x < to; x++) {
-
-            z -= 20;
-            values.add(new Entry(x, z)); // add one entry per hour
-        }
-
-        // create a dataset and give it a type
-        LineDataSet dataSet = new LineDataSet(values, getString(R.string.pet_eating_habit_dataSet));
-        dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
-//        dataSet.setColor(ColorTemplate.getHoloBlue());
-        dataSet.setColors(Color.rgb(0,0,0), Color.argb(77, 0,0,0));
-        dataSet.setLineWidth(1.5f);
-        dataSet.setDrawValues(false);
-        dataSet.setDrawCircles(true);
-        dataSet.setDrawCircleHole(false);
-        dataSet.setCircleColor(Color.rgb(0,0,0));
-
-        // sets the filled area
-        dataSet.setDrawFilled(true);
-        dataSet.setFillFormatter(new IFillFormatter() {
-            @Override
-            public float getFillLinePosition(ILineDataSet dataSet, LineDataProvider dataProvider) {
-                return chart.getAxisLeft().getAxisMinimum();
-            }
-        });
-
-        // sets color of filled area
-        if (Utils.getSDKInt() >= 18) {
-            // drawables only supported on api level 18 and above
-            Drawable drawable = ContextCompat.getDrawable(this, R.drawable.fade_habits);
-            dataSet.setFillDrawable(drawable);
-        } else {
-            dataSet.setFillColor(Color.BLACK);
-        }
-
-        // create a data object with the data sets
-        LineData data = new LineData(dataSet);
-
-        // set data
-        chart.setData(data);
-        chart.invalidate();
-    }
+//    private void setEatingHabitsData(final LineChart chart) {
+//
+//        String input = " 07 Apr 2019 21:51:31 ";
+//        Date date = null;
+//        try {
+//            date = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH).parse(input);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        long milliseconds = TimeUnit.MILLISECONDS.toHours(date.getTime());
+//
+//        // now in hours
+////        long now = TimeUnit.MILLISECONDS.toHours(System.currentTimeMillis());
+//
+//        ArrayList<Entry> values = new ArrayList<>();
+//
+//        // count = hours
+//        float to = (float) milliseconds + 24;
+//        int z = 500;
+//
+//        // increment by 1 hour
+//        for (float x = milliseconds; x < to; x++) {
+//
+//            z -= 20;
+//            values.add(new Entry(x, z)); // add one entry per hour
+//        }
+//
+//        // create a dataset and give it a type
+//        LineDataSet dataSet = new LineDataSet(values, getString(R.string.pet_eating_habit_dataSet));
+//        dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+////        dataSet.setColor(ColorTemplate.getHoloBlue());
+//        dataSet.setColors(Color.rgb(0,0,0), Color.argb(77, 0,0,0));
+//        dataSet.setLineWidth(1.5f);
+//        dataSet.setDrawValues(false);
+//        dataSet.setDrawCircles(true);
+//        dataSet.setDrawCircleHole(false);
+//        dataSet.setCircleColor(Color.rgb(0,0,0));
+//
+//        // sets the filled area
+//        dataSet.setDrawFilled(true);
+//        dataSet.setFillFormatter(new IFillFormatter() {
+//            @Override
+//            public float getFillLinePosition(ILineDataSet dataSet, LineDataProvider dataProvider) {
+//                return chart.getAxisLeft().getAxisMinimum();
+//            }
+//        });
+//
+//        // sets color of filled area
+//        if (Utils.getSDKInt() >= 18) {
+//            // drawables only supported on api level 18 and above
+//            Drawable drawable = ContextCompat.getDrawable(this, R.drawable.fade_habits);
+//            dataSet.setFillDrawable(drawable);
+//        } else {
+//            dataSet.setFillColor(Color.BLACK);
+//        }
+//
+//        // create a data object with the data sets
+//        LineData data = new LineData(dataSet);
+//
+//        // set data
+//        chart.setData(data);
+//        chart.invalidate();
+//    }
 
     private void addEntry(LineChart chart, ArrayList<Entry> values) {
         LineData data = chart.getData();
