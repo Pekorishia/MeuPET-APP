@@ -94,11 +94,12 @@ public class PetListFragment extends ListFragment implements ActionMode.Callback
         this.childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                String chave = dataSnapshot.getKey();
-                Pet pet = dataSnapshot.getValue(Pet.class);
+                if (!dataSnapshot.getKey().toString().equals("notifications")){
+                    Pet pet = dataSnapshot.getValue(Pet.class);
 
-                adapter.addItem(pet);
-                adapter.notifyDataSetChanged();
+                    adapter.addItem(pet);
+                    adapter.notifyDataSetChanged();
+                }
             }
 
             @Override

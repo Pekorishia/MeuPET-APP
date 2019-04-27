@@ -7,22 +7,6 @@
     android:padding="16dp"
     android:background="#FEFEFE">
 
-    <TextView
-        android:id="@+id/tvNotificationContent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textStyle="bold"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/tvNotificationName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,7 +14,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvNotificationDate"
+            android:id="@+id/tvFeedingAmount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textStyle="bold"
@@ -38,7 +22,7 @@
             android:layout_weight="6"/>
 
         <TextView
-            android:id="@+id/tvNotificationTime"
+            android:id="@+id/tvFeedingTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textStyle="bold"

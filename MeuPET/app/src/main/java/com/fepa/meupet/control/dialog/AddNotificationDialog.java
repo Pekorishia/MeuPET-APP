@@ -17,9 +17,10 @@ import com.fepa.meupet.model.environment.notification.Notification;
 
 public class AddNotificationDialog extends DialogFragment {
 
-    private EditText etNotName;
+    private String name;
     private EditText etNotDate;
     private EditText etNotTime;
+    private EditText etNotContent;
 
 
     @NonNull
@@ -27,20 +28,23 @@ public class AddNotificationDialog extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_notification,null);
 
-        this.etNotName = view.findViewById(R.id.etNotificationName);
+
+        this.name = getArguments().getString("petName");
+
         this.etNotDate = view.findViewById(R.id.etNotificationDate);
         this.etNotTime = view.findViewById(R.id.etNotificationTime);
+        this.etNotContent = view.findViewById(R.id.etNotificationName);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.notification_dialog_title);
         builder.setPositiveButton(R.string.dialog_positive, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                String name = etNotName.getText().toString();
+                String content = etNotContent.getText().toString();
                 String date = etNotDate.getText().toString();
                 String time = etNotTime.getText().toString();
 
-                Notification notification = new Notification(name, date, time);
+                Notification notification = new Notification(name, date, time, content);
 
                 // sends the notification through broadcast
                 Intent intent = new Intent(GeneralConfig.Notifications.BROADCAST_NOTIFICATION);

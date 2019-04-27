@@ -19,6 +19,7 @@ public class NotificationItemAdapter  extends BaseAdapter {
         public TextView name;
         public TextView date;
         public TextView time;
+        public TextView content;
     }
 
     public NotificationItemAdapter(Context context){
@@ -64,6 +65,7 @@ public class NotificationItemAdapter  extends BaseAdapter {
             viewHolder.name = view.findViewById(R.id.tvNotificationName);
             viewHolder.date = view.findViewById(R.id.tvNotificationDate);
             viewHolder.time = view.findViewById(R.id.tvNotificationTime);
+            viewHolder.content = view.findViewById(R.id.tvNotificationContent);
             view.setTag(viewHolder);
         }
 
@@ -74,6 +76,7 @@ public class NotificationItemAdapter  extends BaseAdapter {
         holder.name.setText(notification.getName());
         holder.date.setText(notification.getDate());
         holder.time.setText(notification.getTime());
+        holder.content.setText(notification.getContent());
 
         return view;
     }

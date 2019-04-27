@@ -15,20 +15,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fepa.meupet.R;
+import com.fepa.meupet.control.adapter.FeedingTimeItemAdapter;
 import com.fepa.meupet.control.adapter.NotificationItemAdapter;
+import com.fepa.meupet.control.dialog.AddFeedingTimeDialog;
 import com.fepa.meupet.control.dialog.AddNotificationDialog;
 import com.fepa.meupet.control.dialog.EditPetInfoDialog;
 import com.fepa.meupet.model.agent.pet.Pet;
 import com.fepa.meupet.model.environment.constants.GeneralConfig;
+import com.fepa.meupet.model.environment.feeder.FeedingTime;
 import com.fepa.meupet.model.environment.notification.Notification;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -68,16 +69,18 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.EditPetInfoDialogListener, AdapterView.OnItemClickListener, OnMapReadyCallback{
+public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.EditPetInfoDialogListener, AddFeedingTimeDialog.AddFeedingDialogListener, OnMapReadyCallback{
 
     private Pet pet;
     private BroadcastReceiver receiver;
-    private NotificationItemAdapter adapter;
+    private FeedingTimeItemAdapter feedingAdapter;
+    private NotificationItemAdapter notificationAdapter;
     private LinkedHashMap<String, String> activityValues;
 
     private GoogleMap map;
     private Switch sledSwitch;
-    private ListView listView;
+    private ListView lvNotification;
+    private ListView lvFeeding;
     private TextView tvPetAge;
     private TextView tvPetSex;
     private TextView tvPetBreed;
@@ -112,6 +115,9 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
         // handles the eating habits chart
         this.chartHandler(this.lcEatingHabits, GeneralConfig.Pets.EATING_HABITS_CHART);
 
+        // handles the feeding time settings
+        this.feedingTimeHandler();
+
         // handles notification
         this.notificationHandler();
 
@@ -140,11 +146,6 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
     }
 
     @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         finish();
         return true;
@@ -155,6 +156,15 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
         this.pet = _pet;
         this.updatePetDB();
         this.updatePetInfo();
+    }
+
+    @Override
+    public void onFinishFeedingDialog(int amount, String time) {
+        FeedingTime feedingTime= new FeedingTime(amount,time);
+        this.feedingAdapter.addItem(feedingTime);
+        this.feedingAdapter.notifyDataSetChanged();
+
+        this.addFeedingTimeToDB(feedingTime);
     }
 
     @Override
@@ -197,7 +207,8 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
 
         ImageView ivAddNotification = this.findViewById(R.id.ivAddNotification);
 
-        this.setupListView();
+        this.setupNotificationListView();
+        this.notificationListener();
 
         this.receiver = new BroadcastReceiver() {
             @Override
@@ -205,8 +216,7 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
                 Notification notification = (Notification) intent
                         .getSerializableExtra(GeneralConfig.Notifications.NOTIFICATION_BUNDLE);
 
-                adapter.addItem(notification);
-                adapter.notifyDataSetChanged();
+                addNotificationToDB(notification);
             }
         };
 
@@ -214,20 +224,128 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
             @Override
             public void onClick(View view) {
                 AddNotificationDialog notificationDialog = new AddNotificationDialog();
+                Bundle data = new Bundle();
+                data.putString("petName", pet.getName());
+                notificationDialog.setArguments(data);
                 notificationDialog.show(getSupportFragmentManager(),"notificationDialog");
             }
         });
     }
 
-    private void setupListView(){
+    private void addNotificationToDB(Notification notification){
+        String email = this.auth.getCurrentUser().getEmail().replace(".", "");
 
-        this.listView = this.findViewById(android.R.id.list);
-        this.listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        this.reference = this.database
+                .getReference(GeneralConfig.DB_PATH_PERSON+email+GeneralConfig.DB_PATH_NOTIFICATIONS);
 
-        this.adapter = new NotificationItemAdapter(this);
-        this.listView.setAdapter(adapter);
+        this.reference.push().setValue(notification);
+    }
 
-        this.listView.setOnItemClickListener(this);
+    private void notificationListener(){
+        String email = this.auth.getCurrentUser().getEmail().replace(".", "");
+
+        this.reference = this.database
+                .getReference(GeneralConfig.DB_PATH_PERSON+email+GeneralConfig.DB_PATH_NOTIFICATIONS);
+
+        this.childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                String time = dataSnapshot.child("time").getValue().toString();
+                String date = dataSnapshot.child("date").getValue().toString();
+                String name = dataSnapshot.child("name").getValue().toString();
+                String content = dataSnapshot.child("content").getValue().toString();
+
+                // adds the existing notifications to the notification list
+                notificationAdapter.addItem(new Notification(name, date, time, content));
+
+                notificationAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {}
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        };
+
+        this.reference.orderByKey().addChildEventListener(this.childEventListener);
+    }
+
+    private void setupNotificationListView(){
+        this.lvNotification = this.findViewById(android.R.id.list);
+        this.lvNotification.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+        this.notificationAdapter = new NotificationItemAdapter(this);
+        this.lvNotification.setAdapter(notificationAdapter);
+    }
+
+    private void feedingTimeHandler(){
+        ImageView ivFeedingTime = this.findViewById(R.id.ivAddFeedingTime);
+
+        this.setupFeedingListView();
+        this.feedingTimeListener();
+
+        ivFeedingTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddFeedingTimeDialog addFeedingTimeDialog = new AddFeedingTimeDialog();
+                addFeedingTimeDialog.show(getSupportFragmentManager(),"AddFeedingTimeDialog");
+            }
+        });
+    }
+
+    private void setupFeedingListView(){
+        this.lvFeeding = this.findViewById(R.id.list2);
+        this.lvFeeding.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+        this.feedingAdapter = new FeedingTimeItemAdapter(this);
+        this.lvFeeding.setAdapter(feedingAdapter);
+    }
+
+    private void feedingTimeListener(){
+        this.reference = this.database
+                .getReference(GeneralConfig.DB_PATH_FEEDING_TIMES);
+
+        this.childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                String time = dataSnapshot.child("time").getValue().toString();
+                int dropAmount = Integer.parseInt(dataSnapshot.child("drop_amount").getValue().toString());
+
+                // adds the existing notifications to the notification list
+                feedingAdapter.addItem(new FeedingTime(dropAmount, time));
+
+                feedingAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {}
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        };
+
+        this.reference.orderByKey().addChildEventListener(this.childEventListener);
+    }
+
+
+    private void addFeedingTimeToDB(FeedingTime feedingTime){
+        this.reference = this.database
+                .getReference(GeneralConfig.DB_PATH_FEEDING_TIMES);
+
+        this.reference.push().setValue(feedingTime);
     }
 
     private void petInfoHandler(){
@@ -634,70 +752,6 @@ public class PetActivity extends AppCompatActivity implements EditPetInfoDialog.
         // plots the chart
         chart.setData(data);
     }
-
-//    private void setEatingHabitsData(final LineChart chart) {
-//
-//        String input = " 07 Apr 2019 21:51:31 ";
-//        Date date = null;
-//        try {
-//            date = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH).parse(input);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        long milliseconds = TimeUnit.MILLISECONDS.toHours(date.getTime());
-//
-//        // now in hours
-////        long now = TimeUnit.MILLISECONDS.toHours(System.currentTimeMillis());
-//
-//        ArrayList<Entry> values = new ArrayList<>();
-//
-//        // count = hours
-//        float to = (float) milliseconds + 24;
-//        int z = 500;
-//
-//        // increment by 1 hour
-//        for (float x = milliseconds; x < to; x++) {
-//
-//            z -= 20;
-//            values.add(new Entry(x, z)); // add one entry per hour
-//        }
-//
-//        // create a dataset and give it a type
-//        LineDataSet dataSet = new LineDataSet(values, getString(R.string.pet_eating_habit_dataSet));
-//        dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
-////        dataSet.setColor(ColorTemplate.getHoloBlue());
-//        dataSet.setColors(Color.rgb(0,0,0), Color.argb(77, 0,0,0));
-//        dataSet.setLineWidth(1.5f);
-//        dataSet.setDrawValues(false);
-//        dataSet.setDrawCircles(true);
-//        dataSet.setDrawCircleHole(false);
-//        dataSet.setCircleColor(Color.rgb(0,0,0));
-//
-//        // sets the filled area
-//        dataSet.setDrawFilled(true);
-//        dataSet.setFillFormatter(new IFillFormatter() {
-//            @Override
-//            public float getFillLinePosition(ILineDataSet dataSet, LineDataProvider dataProvider) {
-//                return chart.getAxisLeft().getAxisMinimum();
-//            }
-//        });
-//
-//        // sets color of filled area
-//        if (Utils.getSDKInt() >= 18) {
-//            // drawables only supported on api level 18 and above
-//            Drawable drawable = ContextCompat.getDrawable(this, R.drawable.fade_habits);
-//            dataSet.setFillDrawable(drawable);
-//        } else {
-//            dataSet.setFillColor(Color.BLACK);
-//        }
-//
-//        // create a data object with the data sets
-//        LineData data = new LineData(dataSet);
-//
-//        // set data
-//        chart.setData(data);
-//        chart.invalidate();
-//    }
 
     private void addEntry(LineChart chart, ArrayList<Entry> values) {
         LineData data = chart.getData();
